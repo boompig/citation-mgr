@@ -57,22 +57,40 @@ app.post("/login", function (request, response, next) {
  */
 app.get("/topics", function (request, response, next) {
     console.log("hit topics GET endpoint");
-
-    // fetch all the topics from the DB
-    pg.connect(conString, function (err, client, done) {
-        if (err) {
-            return console.error("failed connecting to PG server.");
-        }
-        client.query("SELECT * FROM topics", function(err, result) {
-            done();
+    if (request.query.username) {
+        console.log("Fetching all topics for user %s", request.query.username);
+        // fetch all the topics from the DB
+        pg.connect(conString, function (err, client, done) {
             if (err) {
-                console.error("Error running query", err);
+                return console.error("failed connecting to PG server.");
             }
-            console.log("Wrote %d rows out", result.rows.length);
-            response.send(result.rows);
-            response.end();
+            client.query("SELECT * FROM topics WHERE username=$1", [request.query.username], function(err, result) {
+                done();
+                if (err) {
+                    console.error("Error running query", err);
+                }
+                console.log("Wrote %d rows out", result.rows.length);
+                response.send(result.rows);
+                response.end();
+            });
         });
-    });
+    } else {
+        // fetch all the topics from the DB
+        pg.connect(conString, function (err, client, done) {
+            if (err) {
+                return console.error("failed connecting to PG server.");
+            }
+            client.query("SELECT * FROM topics", function(err, result) {
+                done();
+                if (err) {
+                    console.error("Error running query", err);
+                }
+                console.log("Wrote %d rows out", result.rows.length);
+                response.send(result.rows);
+                response.end();
+            });
+        });
+    }
 });
 
 app.delete("/topics/:id", function (request, response, next) {
@@ -109,8 +127,10 @@ app.post("/topics", function (request, response, next) {
 
     if (!request.body.name) {
         response.send({status: "error", msg: "Empty topic name provided"});
-        console.error("Empty topic name");
-        return;
+        return console.error("Empty topic name");
+    } else if (!request.body.username) {
+        response.send({status: "error", msg: "username for topic not provided"});
+        return console.error("username for topic not provided");
     }
 
     pg.connect(conString, function (err, client, done) {
@@ -118,7 +138,7 @@ app.post("/topics", function (request, response, next) {
             response.send({status: "error", msg: "failed to connect to PG server"});
             return console.error("failed connecting to PG server.");
         }
-        client.query("INSERT INTO topics (name, description) VALUES ($1, $2)", [request.body.name, request.body.description], function (err, result) {
+        client.query("INSERT INTO topics (name, description, username) VALUES ($1, $2, $3)", [request.body.name, request.body.description, request.body.username], function (err, result) {
             done();
             if (err) {
                 console.error("Failed running query", err);
