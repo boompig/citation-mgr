@@ -1,5 +1,6 @@
 {
     "name": "node-repo-mgr",
+    "author": "Daniel Kats",
     "private": true,
     "version": "0.0.1",
     "dependencies": {
@@ -9,6 +10,10 @@
         "pg": "3.4.x"
     },
     "scripts": {
-        "postinstall": "bower install"
+        "postinstall": "bower install",
+        "start": "node server.js"
+    },
+    "engines": {
+        "node": "0.10.x"
     }
 }
