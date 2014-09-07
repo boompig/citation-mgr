@@ -3,6 +3,9 @@ var bodyParser = require("body-parser");
 var app = express();
 var pg = require("pg");
 var conString = "postgres://gru@localhost/citations";
+/* read port from environment variable if set
+ * this is for Heroku */
+var port = process.env.PORT || 8080;
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
@@ -122,6 +125,6 @@ app.post("/refs", function (request, response, next) {
     });
 });
 
-app.listen(8080);
+app.listen(port);
 
 console.log("Node-express app running on port 8080");
