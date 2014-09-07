@@ -8,6 +8,11 @@ angular.module("App", ["ngRoute", "ngCookies", "citationControllers"])
         controller: "LoginCtrl",
         controllerAs: "l"
     })
+    .when("/sections", {
+        templateUrl: "views/sections.html",
+        controller: "SectionCtrl",
+        controllerAs: "sec"
+    })
     .when("/topics", {
         templateUrl: "views/topics.html",
         controller: "TopicCtrl",

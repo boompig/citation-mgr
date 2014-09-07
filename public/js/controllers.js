@@ -45,7 +45,8 @@ app.controller("NavCtrl", ["$scope", "$route", "$routeParams", "$location", "$ht
 
     this.routes = {
         "refs": "References",
-        "topics": "Topics"
+        "topics": "Topics",
+        "sections": "Thesis Sections"
     };
 
     this.getLoginName = function () {
@@ -55,6 +56,19 @@ app.controller("NavCtrl", ["$scope", "$route", "$routeParams", "$location", "$ht
 
     this.isActive = function (path) {
         return $location.path() === "/" + path;
+    };
+}]);
+
+app.controller("SectionCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
+    $scope.sectionData = {
+        name: null,
+        number: null,
+        username: $cookies.loginName
+    };
+
+    $scope.submitSection = function(e) {
+        console.log("submitting section");
+        console.log($scope.sectionData);
     };
 }]);
 

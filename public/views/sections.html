@@ -1,0 +1,29 @@
+<div class="container">
+    <h3 class="subpage-title">Thesis Sections</h3>
+
+    <form ng-submit="submitSection($event)" class="section-form">
+        <label for="name">Section Name</label>
+        <input type="text" class="form-control" name="name" required="required" ng-model="sectionData.name" />
+        <label for="number">Section Number</label>
+        <input type="text" class="form-control" name="number" ng-model="sectionData.number" />
+        <button type="submit" class="btn btn-primary form-control submit-btn">Add Section</button>
+    </form>
+
+    <div ng-if="sectionList.length">
+        <h3 class="subpage-title">Existing Sections</h3>
+        <table class="table table-striped">
+            <thead><tr>
+                <th>Name</th>
+                <th>Number</th>
+                <th><!-- glyphicon to remove stuff --></th>
+            </tr></thead>
+            <tbody>
+                <tr ng-repeat="sectionItem in sectionList">
+                    <td>{{ sectionItem.name }}</td>
+                    <td>{{ sectionItem.description }}</td>
+                    <td ng-click="removeSection(sectionItem)"><span class="glyphicon glyphicon-remove"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
