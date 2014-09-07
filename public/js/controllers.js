@@ -119,6 +119,7 @@ app.controller("RefCtrl", ["$scope", "$route", "$routeParams", "$location", "$ht
         first_author: null,
         year: null,
         topic: null,
+        username: $cookies.loginName
     };
 
     $scope.submitRef = function () {

@@ -150,7 +150,7 @@ app.post("/topics", function (request, response, next) {
 });
 
 app.post("/refs", function (request, response, next) {
-    var insert_query = "INSERT INTO refs (name, first_author, year, topic) VALUES ($1, $2, $3, $4)";
+    var insert_query = "INSERT INTO refs (name, first_author, year, topic, username) VALUES ($1, $2, $3, $4, $5)";
     console.log("hit refs POST endpoint");
 
     if (!request.body.name) {
@@ -169,7 +169,8 @@ app.post("/refs", function (request, response, next) {
                 request.body.name,
                 request.body.first_author,
                 request.body.year,
-                request.body.topic
+                request.body.topic,
+                request.body.username
             ], function (err, result) {
                 done();
                 if (err) {
