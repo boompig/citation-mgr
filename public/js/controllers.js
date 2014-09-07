@@ -11,26 +11,46 @@ Object.prototype.toString = function() {
 
 var app = angular.module("citationControllers", []);
 
-app.controller("MainCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", function($scope, $route, $routeParams, $location, $http) {
-    this.citation = {"blob": ""};
+app.controller("LoginCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
+    this.loginName = null;
 
-    this.submitCitation = function (e) {
-        console.log("citation blob is:");
-        console.log(this.citation);
-
-        $http.post("/json", this.citation).success(function (response, statusCode) {
-            console.log("Submitted to server, received response:");
-            console.log(response);
-        });
+    $scope.login = {
+        name: $cookies.loginName
     };
 
-    console.log($scope);
+    /*
+     * intentionally using -this- here
+     */
+    this.getLoginName = function () {
+        return $cookies.loginName;
+    };
+
+    $scope.submitLogin = function (e) {
+        // send login to Node, add to users table if not present
+        // once done, set a cookie
+        console.log("Logging in");
+        console.log($scope.login);
+        $http.post("/login", $scope.login).success(function(response, statusCode) {
+            console.log("response");
+            console.log(response);
+            if (response.status === "success") {
+                $cookies.loginName = $scope.login.name;
+            }
+        });
+    };
 }]);
 
-app.controller("NavCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", function($scope, $route, $routeParams, $location, $http) {
+app.controller("NavCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
+    this.loginName = null;
+
     this.routes = {
         "refs": "References",
         "topics": "Topics"
+    };
+
+    this.getLoginName = function () {
+        this.loginName = $cookies.loginName;
+        return this.loginName;
     };
 
     this.isActive = function (path) {

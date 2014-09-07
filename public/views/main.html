@@ -1,11 +1,15 @@
 <div class="container">
-    <h1 class="page-title">Citation Manager</h1>
+    <h3 class="subpage-title">Login To Citation Manager</h1>
 
-    <form ng-submit="m.submitCitation($event)">
-        <label for="blob">Blob</label>
-        <textarea class="form-control" name="blob" class="blob" rows="4" ng-model="m.citation.blob">
-        </textarea>
+    <div ng-if="l.getLoginName()">
+        <h4 class="loggedInBanner success">Already loggin in as {{ l.getLoginName() }}</h5>
+    </div>
 
-        <button class="btn btn-primary submit-btn" type="submit">Cite!</button>
+    <form class="login-form" ng-submit="submitLogin($event)">
+        <label for="name">Name</label>
+        <input class="form-control" name="name" ng-model="login.name" required="required">
+        </input>
+
+        <button class="btn btn-primary submit-btn" type="submit">Login</button>
     </form>
 </div>

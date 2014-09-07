@@ -1,12 +1,12 @@
-angular.module("App", ["ngRoute", "citationControllers"])
+angular.module("App", ["ngRoute", "ngCookies", "citationControllers"])
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
     "use strict";
 
     $routeProvider
     .when("/", {
         templateUrl: "views/main.html",
-        controller: "MainCtrl",
-        controllerAs: "m"
+        controller: "LoginCtrl",
+        controllerAs: "l"
     })
     .when("/topics", {
         templateUrl: "views/topics.html",
