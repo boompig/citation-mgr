@@ -2,7 +2,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var pg = require("pg");
-var conString = "postgres://gru@localhost/citations";
+/* read postgres connection string from env variables if set
+ * this is for Heroku */
+var conString = process.env.DATABASE_URL || "postgres://gru@localhost/citations";
 /* read port from environment variable if set
  * this is for Heroku */
 var port = process.env.PORT || 8080;
