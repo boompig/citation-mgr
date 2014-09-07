@@ -1,0 +1,35 @@
+#breaker {
+    height: 50px;
+}
+
+.glyphicon-remove {
+    font-size: 0.8em;
+    color: #DB1A54;
+    cursor: pointer;
+}
+
+.topic-form, .ref-form {
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.ref-form input[type=text] {
+    margin-bottom: 3px;
+}
+
+.subpage-title {
+    text-align: center;
+}
+
+.page-title {
+    text-align: center;
+    margin: 10px auto;
+}
+
+textarea {
+    resize: none;
+}
+
+.submit-btn {
+    margin-top: 10px;
+}

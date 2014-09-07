@@ -1,0 +1,11 @@
+<div class="container">
+    <h1 class="page-title">Citation Manager</h1>
+
+    <form ng-submit="m.submitCitation($event)">
+        <label for="blob">Blob</label>
+        <textarea class="form-control" name="blob" class="blob" rows="4" ng-model="m.citation.blob">
+        </textarea>
+
+        <button class="btn btn-primary submit-btn" type="submit">Cite!</button>
+    </form>
+</div>

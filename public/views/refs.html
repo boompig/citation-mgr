@@ -1,0 +1,20 @@
+<div class="container">
+    <h3 class="subpage-title">Add Reference</h3>
+    <form ng-submit="submitRef($event)" class="ref-form">
+        <label for="name">Paper Name</label>
+        <input type="text" class="form-control" name="name" required="required" ng-model="ref.name" />
+
+        <label for="first_author">First Author</label>
+        <input type="text" class="form-control" name="first_author" ng-model="ref.first_author" />
+
+        <label for="year">Publication Year</label>
+        <input type="number" class="form-control" name="year" ng-model="ref.year" />
+
+        <label for="topic">Topic</label>
+        <select name="topic" ng-model="ref.topic" class="form-control">
+            <option ng-repeat="topic in topicList" value="{{ topic.id }}">{{ topic.name }}</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary submit-btn form-control">Add Reference</button>
+    </form>
+</div>
