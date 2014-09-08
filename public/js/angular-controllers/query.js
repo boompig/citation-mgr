@@ -2,13 +2,17 @@ angular.module("citationControllers")
 .controller("QueryCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
     "use strict";
 
+    /** result list fetched from server */
     $scope.resultList = [];
+    /* data to send to server on query */
     $scope.queryData = {
         "username": $cookies.loginName,
         "sql": null
     };
-
+    /* last error msg */
     $scope.errorMsg = null;
+    /* true on success, false on failure */
+    $scope.lastResultStatus = null;
 
     $scope.runQuery = function (e) {
         console.log("Running query");
@@ -19,9 +23,11 @@ angular.module("citationControllers")
             if (response.hasOwnProperty("status") && response.status === "error") {
                 $scope.resultList = [];
                 $scope.errorMsg = response.msg;
+                $scope.lastResultStatus = false;
             } else {
                 $scope.resultList = response;
                 $scope.errorMsg = null;
+                $scope.lastResultStatus = true;
             }
         });
     };

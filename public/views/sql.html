@@ -12,9 +12,12 @@
 
     <div ng-if="errorMsg" class="query-msg error">{{ errorMsg }}</div>
 
-    <div ng-if="resultList.length">
+    <div ng-if="lastResultStatus">
         <h3 class="subpage-title">Results</h3>
-        <table class="table table-striped table-condensed">
+
+        <h4 class="emptyTableMsg" ng-if="resultList.length == 0">No results</h4>
+
+        <table class="table table-striped table-condensed" ng-if="resultList.length">
             <thead>
                 <tr>
                     <th ng-repeat="heading in getResultHeadings()">{{ heading }}</th>
