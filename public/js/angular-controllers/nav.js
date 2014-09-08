@@ -6,7 +6,8 @@ angular.module("citationControllers")
         "refs": "References",
         "topics": "Topics",
         "sections": "Thesis Sections",
-        "locations": "Reference Locations"
+        "locations": "Reference Locations",
+        "sql": "SQL"
     };
 
     this.getLoginName = function () {

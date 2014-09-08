@@ -7,13 +7,34 @@
     text-align: center;
 }
 
+.warning {
+    color: #EDE626;
+}
+
+.query-form textarea {
+    margin-bottom: 20px;
+}
+
+h4.warning {
+    text-align: center;
+}
+
 .section-form label {
     margin-top: 2px;
 }
 
 .section-form .error {
     text-align: center;
+}
+
+.error {
     color: #B8091B;
+}
+
+.query-msg {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.2em;
 }
 
 .section-form .success {

@@ -6,6 +6,7 @@
         "bootstrap": "3.2.0",
         "angular": "1.2.x",
         "angular-route": "1.2.x",
-        "angular-cookies": "1.2.x"
+        "angular-cookies": "1.2.x",
+        "underscore": "1.7.x"
     }
 }

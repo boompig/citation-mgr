@@ -21,6 +21,38 @@ var refs = require("./node-controllers/refs");
 var locations = require("./node-controllers/locations");
 var login = require("./node-controllers/login");
 
+// experimental
+var cruft = require("./node-controllers/pg_cruft.js");
+
+app.get("/cruft", function (request, response, next) {
+    cruft.addEntry ("test", ["name, description"], ["dbk", "my name"], conString, function (err, insert_id) {
+        console.log(err);
+        console.log(insert_id);
+    });
+    cruft.getEntries ("test", "daniel", ["dbk", "my name"], conString, function (err, result) {
+        console.log(err);
+        console.log(result);
+    });
+});
+
+/********************* SQL **********************/
+app.post("/sql", function (request, response, next) {
+    console.log("Hit SQL POST endpoint");
+    if (!request.body.sql) {
+        console.error("query not provided");
+        return response.send({status: "error", msg: "Query not provided" });
+    }
+    cruft.query(request.body.sql, [], conString, function (err, result) {
+        if (err) {
+            console.log(err.toString());
+            return response.send({ status: "error", msg: err.toString() });
+        } else {
+            response.send(result.rows);
+        }
+    });
+});
+/********************* SQL **********************/
+
 /****************** LOGIN ******************************/
 app.post("/login", function (request, response, next) {
     console.log("Hit login POST endpoint");

@@ -18,6 +18,11 @@ angular.module("App", ["ngRoute", "ngCookies", "citationControllers"])
         controller: "TopicCtrl",
         controllerAs: "t"
     })
+    .when("/sql", {
+        templateUrl: "views/sql.html",
+        controller: "QueryCtrl",
+        controllerAs: "query"
+    })
     .when("/locations", {
         templateUrl: "views/locations.html",
         controller: "LocationCtrl",
