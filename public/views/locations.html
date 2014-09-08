@@ -1,3 +1,20 @@
 <div class="container">
-    <h3 class="subpage-title">Locations</h3>
+    <h3 class="subpage-title">Reference Locations</h3>
+
+    <table class="table table-striped table-condensed" ng-show="locationList.length">
+        <thead>
+            <tr>
+                <th>Reference Quote</th>
+                <th>Topic</th>
+                <th><!-- for deletion --></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="locationItem in locationList">
+                <td>{{ locationItem.ref_quote }}</td>
+                <td>{{ locationItem.topic }}</td>
+                <td ng-click="removeTopic(topicItem)"><span class="glyphicon glyphicon-remove"></span></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
