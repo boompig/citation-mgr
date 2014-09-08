@@ -16,6 +16,7 @@ app.use(bodyParser.json());
  * One controller for each endpoint
  */
 var topics = require("./topics");
+var sections = require("./sections");
 var refs = require("./refs");
 var login = require("./login");
 
@@ -47,6 +48,18 @@ app.post("/refs", function (request, response, next) {
     refs.addRef(request, response, next, conString);
 });
 /****************** REFS ******************************/
+
+/****************** SECTIONS ******************************/
+app.post("/sections/", function(request, response, next) {
+    console.log("hit sections POST endpoint");
+    sections.addSection(request, response, next, conString);
+});
+
+app.get("/sections/", function(request, response, next) {
+    console.log("hit sections GET endpoint");
+    sections.getSections(request, response, next, conString);
+});
+/****************** SECTIONS ******************************/
 
 app.listen(port);
 
