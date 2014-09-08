@@ -16,6 +16,7 @@ exports.getTopics = function (request, response, next, conString) {
                 if (err) {
                     console.error("Error running query", err);
                 }
+
                 console.log("Wrote %d rows out", result.rows.length);
                 response.send(result.rows);
                 response.end();
@@ -59,10 +60,11 @@ exports.deleteTopic = function (request, response, next, conString) {
                 done();
                 if (err) {
                     console.error("Error running query", err);
+                    response.send({status: "error", msg: err});
+                } else {
+                    console.log("Deleted %d rows", result.rowCount);
+                    response.send({status: "success"});
                 }
-                console.log("Deleted %d rows", result.rowCount);
-                response.send({status: "success"});
-                response.end();
             }
         );
     });
@@ -87,8 +89,17 @@ exports.addTopic = function(request, response, next, conString) {
             if (err) {
                 console.error("Failed running query", err);
             }
-            console.log("Inserted 1 row");
-            response.send({status: "success"});
+            console.log("Inserted 1 row, getting insert ID...");
+
+            // now get the insert ID
+            client.query("SELECT * FROM topics WHERE name=$1 AND description=$2 AND username=$3", [request.body.name, request.body.description, request.body.username], function(err, result) {
+
+                console.log("Insert ID is " + result.rows[0].id);
+                response.send({
+                    status: "success",
+                    insert_id: result.rows[0].id
+                });
+            });
         });
     });
 };
