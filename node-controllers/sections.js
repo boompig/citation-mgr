@@ -82,13 +82,21 @@ exports.addSection = function(request, response, next, conString) {
             response.send({status: "error", msg: "failed to connect to PG server"});
             return console.error("failed connecting to PG server.");
         }
-        client.query("INSERT INTO sections (name, section_number, username) VALUES ($1, $2, $3)", [request.body.name, request.body.number, request.body.username], function (err, result) {
+
+        client.query("INSERT INTO sections (name, section_number, username) VALUES ($1, $2, $3)", [request.body.name, request.body.section_number, request.body.username], function (err, result) {
             done();
             if (err) {
                 console.error("Failed running query", err);
+                response.send({status: "error", msg: err});
+            } else {
+                console.log("Inserted 1 row, getting insert ID...");
+
+                // get the insert ID
+                client.query("SELECT id FROM sections WHERE name=$1 and section_number=$2 and username=$3", [request.body.name, request.body.section_number, request.body.username], function (err, result) {
+                    console.log("Insert ID is " + result.rows[0].id);
+                    response.send({status: "success", insert_id: result.rows[0].id});
+                });
             }
-            console.log("Inserted 1 row");
-            response.send({status: "success"});
         });
     });
 };

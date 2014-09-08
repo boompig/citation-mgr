@@ -12,6 +12,9 @@ angular.module("citationControllers")
         username: $cookies.loginName
     };
 
+    /* list of references loaded from DB */
+    $scope.refList = [];
+
     $scope.submitRef = function () {
         console.log("adding ref:");
         console.log($scope.ref);
@@ -25,7 +28,15 @@ angular.module("citationControllers")
         });
     };
 
-    $scope.fetchTopicList = function() {
+    $scope.getRefList = function() {
+        $http.get("/refs?username=" + $cookies.loginName).success(function (response, statusCode) {
+            console.log("refs:");
+            console.log(response);
+            $scope.refList = response;
+        });
+    };
+
+    $scope.getTopicList = function() {
         var that = this;
 
         $http.get("/topics?username=" + $cookies.loginName).success(function (response, statusCode) {
@@ -35,5 +46,6 @@ angular.module("citationControllers")
         });
     };
 
-    $scope.fetchTopicList();
+    $scope.getTopicList();
+    $scope.getRefList();
 }]);

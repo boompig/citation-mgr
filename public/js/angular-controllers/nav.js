@@ -5,7 +5,8 @@ angular.module("citationControllers")
     this.routes = {
         "refs": "References",
         "topics": "Topics",
-        "sections": "Thesis Sections"
+        "sections": "Thesis Sections",
+        "locations": "Reference Locations"
     };
 
     this.getLoginName = function () {

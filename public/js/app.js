@@ -18,6 +18,11 @@ angular.module("App", ["ngRoute", "ngCookies", "citationControllers"])
         controller: "TopicCtrl",
         controllerAs: "t"
     })
+    .when("/locations", {
+        templateUrl: "views/locations.html",
+        controller: "LocationCtrl",
+        controllerAs: "loc"
+    })
     .when("/refs", {
         templateUrl: "views/refs.html",
         controller: "RefCtrl",

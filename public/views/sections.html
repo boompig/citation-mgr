@@ -2,10 +2,13 @@
     <h3 class="subpage-title">Thesis Sections</h3>
 
     <form ng-submit="submitSection($event)" class="section-form">
+        <div class="error" ng-if="sectionAddStatus === 'error'">{{ sectionAddErrorMsg }}</div>
+        <div class="success" ng-if="sectionAddStatus === 'success'">Successfully added section</div>
+
         <label for="name">Section Name</label>
         <input type="text" class="form-control" name="name" required="required" ng-model="sectionData.name" />
         <label for="number">Section Number</label>
-        <input type="text" class="form-control" name="number" ng-model="sectionData.number" />
+        <input type="text" class="form-control" name="number" ng-model="sectionData.section_number" />
         <button type="submit" class="btn btn-primary form-control submit-btn">Add Section</button>
     </form>
 
@@ -18,9 +21,9 @@
                 <th><!-- glyphicon to remove stuff --></th>
             </tr></thead>
             <tbody>
-                <tr ng-repeat="sectionItem in sectionList">
+                <tr ng-repeat="sectionItem in sectionList | orderBy:'section_number'">
                     <td>{{ sectionItem.name }}</td>
-                    <td>{{ sectionItem.description }}</td>
+                    <td>{{ sectionItem.section_number }}</td>
                     <td ng-click="removeSection(sectionItem)"><span class="glyphicon glyphicon-remove"></span></td>
                 </tr>
             </tbody>

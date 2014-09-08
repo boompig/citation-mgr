@@ -2,6 +2,24 @@
     height: 50px;
 }
 
+.ref-summary {
+    margin-top: 2%;
+    text-align: center;
+}
+
+.section-form label {
+    margin-top: 2px;
+}
+
+.section-form .error {
+    text-align: center;
+    color: #B8091B;
+}
+
+.section-form .success {
+    text-align: center;
+}
+
 .glyphicon-remove {
     font-size: 0.8em;
     color: #DB1A54;

@@ -18,12 +18,22 @@ app.use(bodyParser.json());
 var topics = require("./node-controllers/topics");
 var sections = require("./node-controllers/sections");
 var refs = require("./node-controllers/refs");
+var locations = require("./node-controllers/locations");
 var login = require("./node-controllers/login");
 
+/****************** LOGIN ******************************/
 app.post("/login", function (request, response, next) {
     console.log("Hit login POST endpoint");
     login.addUser(request, response, next, conString);
 });
+/****************** LOGIN ******************************/
+
+/****************** LOCATIONS ******************************/
+app.get("/locations", function (request, response, next) {
+    console.log("hit locations GET endpoint");
+    return locations.getLocations(request, response, next, conString);
+});
+/****************** LOCATIONS ******************************/
 
 /****************** TOPICS ******************************/
 app.get("/topics", function (request, response, next) {
@@ -47,6 +57,11 @@ app.post("/refs", function (request, response, next) {
     console.log("hit refs POST endpoint");
     refs.addRef(request, response, next, conString);
 });
+
+app.get("/refs", function (request, response, next) {
+    console.log("hit refs GET endpoint");
+    refs.getRefs(request, response, next, conString);
+});
 /****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/
@@ -58,6 +73,11 @@ app.post("/sections/", function(request, response, next) {
 app.get("/sections/", function(request, response, next) {
     console.log("hit sections GET endpoint");
     sections.getSections(request, response, next, conString);
+});
+
+app.delete("/sections/:id", function(request, response, next) {
+    console.log("hit sections DELETE endpoint");
+    sections.deleteSection(request, response, next, conString);
 });
 /****************** SECTIONS ******************************/
 
