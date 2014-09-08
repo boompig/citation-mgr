@@ -15,10 +15,10 @@ app.use(bodyParser.json());
 /**
  * One controller for each endpoint
  */
-var topics = require("./topics");
-var sections = require("./sections");
-var refs = require("./refs");
-var login = require("./login");
+var topics = require("./node-controllers/topics");
+var sections = require("./node-controllers/sections");
+var refs = require("./node-controllers/refs");
+var login = require("./node-controllers/login");
 
 app.post("/login", function (request, response, next) {
     console.log("Hit login POST endpoint");
