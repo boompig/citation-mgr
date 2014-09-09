@@ -11,6 +11,7 @@ exports.addUser = function (request, response, next, conString) {
     }
     pg.connect(conString, function (err, client, done) {
         if (err) {
+            response.send({"status": "error", "msg": "failed to connect to postgres server"});
             return console.error("failed connecting to PG server.");
         }
         client.query("SELECT * FROM users where name=$1", [request.body.name], function(err, result) {

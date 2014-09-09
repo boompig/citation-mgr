@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="login-page">
     <h3 class="subpage-title">Login To Citation Manager</h1>
 
     <div ng-if="l.getLoginName()">
@@ -12,4 +12,6 @@
 
         <button class="btn btn-primary submit-btn" type="submit">Login</button>
     </form>
+
+    <div class="status-msg error" ng-show="errorMsg">{{ errorMsg }}</div>
 </div>

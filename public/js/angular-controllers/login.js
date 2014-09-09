@@ -8,6 +8,8 @@ angular.module("citationControllers")
         name: $cookies.loginName
     };
 
+    $scope.errorMsg = null;
+
     /*
      * intentionally using -this- here
      */
@@ -25,6 +27,8 @@ angular.module("citationControllers")
             console.log(response);
             if (response.status === "success") {
                 $cookies.loginName = $scope.login.name;
+            } else {
+                $scope.errorMsg = response.msg;
             }
         });
     };
