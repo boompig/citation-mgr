@@ -4,7 +4,7 @@ angular.module("App", ["ui.bootstrap", "ngRoute", "ngCookies", "citationControll
 
     $routeProvider
     .when("/", {
-        templateUrl: "views/main.html",
+        templateUrl: "views/login.html",
         controller: "LoginCtrl",
         controllerAs: "l"
     })
