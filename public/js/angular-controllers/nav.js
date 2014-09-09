@@ -2,13 +2,13 @@ angular.module("citationControllers")
 .controller("NavCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
     this.loginName = null;
 
-    this.routes = {
-        "refs": "References",
-        "topics": "Topics",
-        "sections": "Thesis Sections",
-        "locations": "Reference Locations",
-        "sql": "SQL"
-    };
+    this.routes = [
+        {"link": "refs", "name": "References"},
+        {"link": "topics", "name": "Topics"},
+        {"link": "sections", "name": "Thesis Sections"},
+        {"link": "locations", "name": "Reference Locations"},
+        {"link": "sql", "name": "SQL"}
+    ];
 
     this.getLoginName = function () {
         this.loginName = $cookies.loginName;

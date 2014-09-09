@@ -22,8 +22,8 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li ng-repeat="(path, name) in n.routes" ng-class="{active: n.isActive(path)}">
-                            <a href="/#/{{ path }}">{{ name }}</a>
+                        <li ng-repeat="route in n.routes" ng-class="{active: n.isActive(path)}">
+                            <a href="/#/{{ route.link }}">{{ route.name }}</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
