@@ -10,10 +10,8 @@
         <label for="year">Publication Year</label>
         <input type="number" class="form-control" name="year" ng-model="ref.year" />
 
-        <label for="topic">Topic</label>
-        <select name="topic" ng-model="ref.topic" class="form-control">
-            <option ng-repeat="topic in topicList" value="{{ topic.id }}">{{ topic.name }}</option>
-        </select>
+        <label for="citation_num">Citation Number</label>
+        <input type="number" class="form-control" name="citation_num" ng-model="ref.citation_num" />
 
         <button type="submit" class="btn btn-primary submit-btn form-control">Add Reference</button>
     </form>

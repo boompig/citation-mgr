@@ -1,7 +1,7 @@
 var pg = require("pg");
 
 exports.addRef = function(request, response, next, conString) {
-    var insert_query = "INSERT INTO refs (name, first_author, year, ref, username) VALUES ($1, $2, $3, $4, $5)";
+    var insert_query = "INSERT INTO refs (name, first_author, year, citation_num, username) VALUES ($1, $2, $3, $4, $5)";
 
     if (!request.body.name) {
         response.send({status: "error", msg: "Empty ref name provided"});
@@ -19,15 +19,17 @@ exports.addRef = function(request, response, next, conString) {
                 request.body.name,
                 request.body.first_author,
                 request.body.year,
-                request.body.ref,
+                request.body.citation_num,
                 request.body.username
             ], function (err, result) {
                 done();
                 if (err) {
                     console.error("Failed running query", err);
+                    return response.send({status: "error", msg: err.toString()});
+                } else {
+                    console.log(result);
+                    return response.send({status: "success"});
                 }
-                console.log(result);
-                response.send({status: "success"});
             }
         );
     });
