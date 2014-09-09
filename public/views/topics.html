@@ -18,7 +18,7 @@
                 <th><!-- glyphicon to remove stuff --></th>
             </tr></thead>
             <tbody>
-                <tr ng-repeat="topicItem in topicList">
+                <tr ng-repeat="topicItem in topicList|orderBy:'name'">
                     <td>{{ topicItem.name }}</td>
                     <td>{{ topicItem.description }}</td>
                     <td ng-click="removeTopic(topicItem)"><span class="glyphicon glyphicon-remove"></span></td>
