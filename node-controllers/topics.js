@@ -88,6 +88,7 @@ exports.addTopic = function(request, response, next, conString) {
             done();
             if (err) {
                 console.error("Failed running query", err);
+                return response.send({status: "error", msg: err.toString()});
             }
             console.log("Inserted 1 row, getting insert ID...");
 
