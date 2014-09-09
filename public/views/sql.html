@@ -1,16 +1,34 @@
-<div class="container">
+<div class="container" id="query-page">
     <h3 class="subpage-title">Arbitrary SQL Execution</h3>
     <h4 class="subpage-title">Be careful!</h4>
 
-    <form class="query-form" ng-submit="runQuery($event)">
+    <form class="query-form" ng-submit="runQuery()">
         <label for="query">SQL Query</label>
         <textarea class="form-control" rows="3" name="query" ng-model="queryData.sql" required="required">
         </textarea>
+
+        <label for="name">Query Name (optional)</label>
+        <input type="text" class="form-control" name="name" ng-model="queryData.name" />
 
         <button class="btn btn-primary form-control" type="submit">Run Query</button>
     </form>
 
     <div ng-if="errorMsg" class="query-msg error">{{ errorMsg }}</div>
+
+    <accordion close-others="oneAtATime">
+        <accordion-group heading="Past Queries ({{ pastQueries.length }})">
+            <div ng-if="pastQueries.length">
+                <div ng-repeat="query in pastQueries">
+                    <h4>
+                        <span class="label label-info" ng-click="rerunQuery(query)">Rerun</span>
+                        <span ng-if="query.name">{{ query.name }}</span>
+                    </h5>
+                    <p>{{ query.sql }}</p>
+                </div>
+            </div>
+            <div ng-if="pastQueries.length === 0">You have no past queries</div>
+        </accordion-group>
+    </accordion>
 
     <div ng-if="lastResultStatus">
         <h3 class="subpage-title">Results</h3>

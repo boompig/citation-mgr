@@ -7,14 +7,23 @@ angular.module("citationControllers")
     /* data to send to server on query */
     $scope.queryData = {
         "username": $cookies.loginName,
-        "sql": null
+        "sql": null,
+        "name": null
     };
     /* last error msg */
     $scope.errorMsg = null;
     /* true on success, false on failure */
     $scope.lastResultStatus = null;
+    /* list of previously executed queries */
+    $scope.pastQueries = [];
 
-    $scope.runQuery = function (e) {
+    /* rerun existing query object */
+    $scope.rerunQuery = function (query) {
+        $scope.queryData = query;
+        $scope.runQuery();
+    };
+
+    $scope.runQuery = function () {
         console.log("Running query");
         console.log($scope.queryData);
         $http.post("/sql", $scope.queryData).success(function(response, statusCode) {
@@ -28,6 +37,26 @@ angular.module("citationControllers")
                 $scope.resultList = response;
                 $scope.errorMsg = null;
                 $scope.lastResultStatus = true;
+
+                /* uniqueness checking */
+                var unique = true;
+                for (var i = 0; i < $scope.pastQueries.length; i++) {
+                    if ($scope.pastQueries[i].name === $scope.queryData.name &&
+                        $scope.pastQueries[i].sql === $scope.queryData.sql) {
+                        unique = false;
+                        break;
+                    }
+                }
+                if (unique) {
+                    $scope.pastQueries.push($scope.queryData);
+                }
+
+                /* clone existing object, ish */
+                $scope.queryData = {
+                    name: null,
+                    sql: $scope.queryData.sql,
+                    username: $cookies.loginName
+                };
             }
         });
     };

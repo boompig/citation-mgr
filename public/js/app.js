@@ -1,4 +1,4 @@
-angular.module("App", ["ngRoute", "ngCookies", "citationControllers"])
+angular.module("App", ["ui.bootstrap", "ngRoute", "ngCookies", "citationControllers"])
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
     "use strict";
 

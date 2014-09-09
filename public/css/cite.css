@@ -7,6 +7,19 @@
     text-align: center;
 }
 
+#query-page accordion .panel-heading {
+    cursor: pointer;
+}
+
+#query-page accordion .label {
+    margin-right: 2px;
+    cursor: pointer;
+}
+
+.query-form {
+    margin-bottom: 10px;
+}
+
 .warning {
     color: #EDE626;
 }
@@ -15,16 +28,16 @@
     text-align: center;
 }
 
-.query-form textarea {
-    margin-bottom: 20px;
-}
-
 h4.warning {
     text-align: center;
 }
 
-.section-form label {
-    margin-top: 2px;
+.section-form label, .query-form label {
+    margin-top: 4px;
+}
+
+.query-form input[name="name"] {
+    margin-bottom: 10px;
 }
 
 .section-form .error {
@@ -64,9 +77,14 @@ h4.warning {
     color: #318C2E;
 }
 
-.topic-form, .section-form, .ref-form, .login-form {
+.topic-form, .section-form, .ref-form, .login-form, .location-form {
     margin: 0 auto;
     max-width: 400px;
+}
+
+.modal-open-btn-container {
+    margin: 0 auto;
+    text-align: center;
 }
 
 .ref-form input[type=text] {
