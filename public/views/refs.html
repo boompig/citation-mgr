@@ -17,4 +17,25 @@
     </form>
 
     <h4 class="ref-summary">You currently have {{ refList.length }} references in the system</h4>
+
+    <div ng-show="refList.length">
+        <table class="table table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>First Author</th>
+                    <th>Year</th>
+                    <th>Citation Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="refItem in refList|orderBy:'citation_num'">
+                    <td>{{ refItem.name }}</td>
+                    <td>{{ refItem.first_author }}</td>
+                    <td>{{ refItem.year }}</td>
+                    <td>{{ refItem.citation_num }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
