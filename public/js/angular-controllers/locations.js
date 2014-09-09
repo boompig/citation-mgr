@@ -17,7 +17,7 @@ angular.module("citationControllers")
     };
 
     $scope.getTopic = function (topicID) {
-        if (Object.keys($scope.topics) === []) {
+        if (Object.keys($scope.topics).length === 0) {
             return null;
         } else {
             return $scope.topics[topicID].name;
