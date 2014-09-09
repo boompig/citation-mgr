@@ -8,13 +8,20 @@ angular.module("citationControllers")
     /* data received from API endpoint */
     $scope.topicList = [];
 
+    /* true on success, false on failure */
+    $scope.lastStatus = null;
+    /* displayed when lastStatus not null, only displays on INSERT */
+    $scope.statusMsg = null;
+
     $scope.removeTopic = function (topicItem) {
         console.log("removing topic:");
         console.log(topicItem);
+        $scope.lastStatus = null;
 
         $http.delete("/topics/" + topicItem.id).success(function (response, statusCode) {
             console.log("got response:");
             console.log(response);
+
             if (response.status === "success") {
                 // do not remove until success is returned
                 var i = $scope.topicList.indexOf(topicItem);
@@ -31,14 +38,21 @@ angular.module("citationControllers")
         console.log($scope.topicData);
 
         $http.post("/topics", $scope.topicData).success(function (response, statusCode) {
+            console.log("got response:");
+            console.log(response);
+
+            $scope.lastStatus = (response.status === "success");
+
             if (response.status === "success") {
                 // insert ID is returned in response
                 $scope.topicData.id = response.insert_id;
                 $scope.topicList.push($scope.topicData);
                 $scope.topicData = {name: null, description: null, username: $cookies.loginName};
+
+                $scope.statusMsg = "Successfully created topic";
+            } else {
+                $scope.statusMsg = response.msg;
             }
-            console.log("got response:");
-            console.log(response);
         });
     };
 

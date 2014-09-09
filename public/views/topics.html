@@ -2,6 +2,10 @@
     <h3 class="subpage-title">Add Topic</h3>
 
     <form ng-submit="submitTopic($event)" class="topic-form">
+        <div class="status-msg" ng-if="lastStatus !== null" ng-class="{error: lastStatus === false, success: lastStatus === true}">
+            {{ statusMsg }}
+        </div>
+
         <label for="name">Topic</label>
         <input type="text" class="form-control" name="name" required="required" ng-model="topicData.name" />
         <label for="description">Description</label>

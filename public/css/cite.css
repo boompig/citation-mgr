@@ -11,6 +11,10 @@
     color: #EDE626;
 }
 
+.topic-form .status-msg {
+    text-align: center;
+}
+
 .query-form textarea {
     margin-bottom: 20px;
 }
