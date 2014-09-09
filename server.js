@@ -24,17 +24,6 @@ var login = require("./node-controllers/login");
 // experimental
 var cruft = require("./node-controllers/pg_cruft.js");
 
-app.get("/cruft", function (request, response, next) {
-    cruft.addEntry ("test", ["name, description"], ["dbk", "my name"], conString, function (err, insert_id) {
-        console.log(err);
-        console.log(insert_id);
-    });
-    cruft.getEntries ("test", "daniel", ["dbk", "my name"], conString, function (err, result) {
-        console.log(err);
-        console.log(result);
-    });
-});
-
 /********************* SQL **********************/
 app.post("/sql", function (request, response, next) {
     console.log("Hit SQL POST endpoint");

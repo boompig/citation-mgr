@@ -1,76 +1,51 @@
 var pg = require("pg");
+var cruft = require("./pg_cruft.js");
 
 /*
  * conString is the postgres connection string
  */
 exports.getTopics = function (request, response, next, conString) {
+    "use strict";
+    var query, data;
     if (request.query.username) {
+        query = "SELECT * FROM topics WHERE username=$1";
+        data = [request.query.username];
         console.log("Fetching all topics for user %s", request.query.username);
-        // fetch all the topics from the DB
-        pg.connect(conString, function (err, client, done) {
-            if (err) {
-                return console.error("failed connecting to PG server.");
-            }
-            client.query("SELECT * FROM topics WHERE username=$1", [request.query.username], function(err, result) {
-                done();
-                if (err) {
-                    console.error("Error running query", err);
-                }
-
-                console.log("Wrote %d rows out", result.rows.length);
-                response.send(result.rows);
-                response.end();
-            });
-        });
     } else {
-        // fetch all the topics from the DB
-        pg.connect(conString, function (err, client, done) {
-            if (err) {
-                return console.error("failed connecting to PG server.");
-            }
-            client.query("SELECT * FROM topics", function(err, result) {
-                done();
-                if (err) {
-                    console.error("Error running query", err);
-                }
-                console.log("Wrote %d rows out", result.rows.length);
-                response.send(result.rows);
-                response.end();
-            });
-        });
+        query = "SELECT * FROM topics";
+        data = [];
     }
+    cruft.query(query, data, conString, function (err, result) {
+        if (err) {
+            return response.send({ status: "error", msg: err.toString() });
+        } else {
+            console.log("Wrote %d rows out", result.rows.length);
+            response.send(result.rows);
+        }
+    });
 };
 
 exports.deleteTopic = function (request, response, next, conString) {
-    // make sure the name is provided
+    // make sure the id is provided
     if (! request.params.id) {
         response.send({status: "error", msg: "No topic id provided"});
-        console.error("Topic ID not provided in request");
-        return;
+        return console.error("Topic ID not provided in request");
     }
 
-    pg.connect(conString, function (err, client, done) {
+    var query = "DELETE FROM topics WHERE id=$1";
+    var data = [request.params.id];
+    cruft.query(query, data, conString, function (err, result) {
         if (err) {
-            return console.error("failed connecting to PG server.");
+            return response.send({ status: "error", msg: err.toString() });
+        } else {
+            console.log("Deleted %d rows", result.rowCount);
+            response.send({ status: "success" });
         }
-        client.query(
-            "DELETE FROM topics WHERE id=$1",
-            [request.params.id],
-            function(err, result) {
-                done();
-                if (err) {
-                    console.error("Error running query", err);
-                    response.send({status: "error", msg: err});
-                } else {
-                    console.log("Deleted %d rows", result.rowCount);
-                    response.send({status: "success"});
-                }
-            }
-        );
     });
 };
 
 exports.addTopic = function(request, response, next, conString) {
+    // name must be specified for topic
     if (!request.body.name) {
         response.send({status: "error", msg: "Empty topic name provided"});
         return console.error("Empty topic name");
@@ -79,28 +54,14 @@ exports.addTopic = function(request, response, next, conString) {
         return console.error("username for topic not provided");
     }
 
-    pg.connect(conString, function (err, client, done) {
+    var query = "INSERT INTO topics (name, description, username) VALUES ($1, $2, $3) RETURNING id";
+    var data = [request.body.name, request.body.description, request.body.username];
+    cruft.query(query, data, conString, function (err, result) {
         if (err) {
-            response.send({status: "error", msg: "failed to connect to PG server"});
-            return console.error("failed connecting to PG server.");
+            return response.send({ status: "error", msg: err.toString() });
+        } else {
+            console.log("Inserted with ID", result.rows[0].id);
+            response.send({ status: "success", "insert_id": result.rows[0].id });
         }
-        client.query("INSERT INTO topics (name, description, username) VALUES ($1, $2, $3)", [request.body.name, request.body.description, request.body.username], function (err, result) {
-            done();
-            if (err) {
-                console.error("Failed running query", err);
-                return response.send({status: "error", msg: err.toString()});
-            }
-            console.log("Inserted 1 row, getting insert ID...");
-
-            // now get the insert ID
-            client.query("SELECT * FROM topics WHERE name=$1 AND description=$2 AND username=$3", [request.body.name, request.body.description, request.body.username], function(err, result) {
-
-                console.log("Insert ID is " + result.rows[0].id);
-                response.send({
-                    status: "success",
-                    insert_id: result.rows[0].id
-                });
-            });
-        });
     });
 };
