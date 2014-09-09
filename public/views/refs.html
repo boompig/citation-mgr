@@ -1,6 +1,10 @@
 <div class="container">
     <h3 class="subpage-title">Add Reference</h3>
     <form ng-submit="submitRef($event)" class="ref-form">
+        <div class="status-msg" ng-if="lastStatus !== null" ng-class="{error: lastStatus === false, success: lastStatus === true}">
+            {{ statusMsg }}
+        </div>
+
         <label for="name">Paper Name</label>
         <input type="text" class="form-control" name="name" required="required" ng-model="ref.name" />
 

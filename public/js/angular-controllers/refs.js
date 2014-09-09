@@ -15,6 +15,11 @@ angular.module("citationControllers")
     /* list of references loaded from DB */
     $scope.refList = [];
 
+    /* true on success, false on failure */
+    $scope.lastStatus = null;
+    /* displayed when lastStatus not null, only displays on INSERT */
+    $scope.statusMsg = null;
+
     $scope.submitRef = function () {
         console.log("adding ref:");
         console.log($scope.ref);
@@ -22,7 +27,12 @@ angular.module("citationControllers")
         $http.post("/refs", $scope.ref).success(function (response, statusCode) {
             console.log("got response:");
             console.log(response);
+
+            $scope.lastStatus = (response.status === "success");
+
             if (response.status === "success") {
+                // add insert ID to the object
+                $scope.ref.id = response.insert_id;
                 $scope.refList.push($scope.ref);
 
                 // reset ref
@@ -33,11 +43,16 @@ angular.module("citationControllers")
                     topic: null,
                     username: $cookies.loginName
                 };
+                $scope.statusMsg = "Successfully added reference";
+            } else {
+                $scope.statusMsg = response.msg;
             }
         });
     };
 
     $scope.deleteRef = function (refItem) {
+        $scope.statusMsg = null;
+
         $http.delete("/refs/" + refItem.id).success(function(response, statusCode) {
             console.log("response:");
             console.log(response);

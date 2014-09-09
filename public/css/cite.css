@@ -11,7 +11,7 @@
     color: #EDE626;
 }
 
-.topic-form .status-msg {
+.topic-form .status-msg, .ref-form .status-msg {
     text-align: center;
 }
 
