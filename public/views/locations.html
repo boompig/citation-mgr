@@ -12,7 +12,7 @@
         <tbody>
             <tr ng-repeat="locationItem in locationList">
                 <td>{{ locationItem.ref_quote }}</td>
-                <td>{{ locationItem.topic }}</td>
+                <td>{{ getTopic(locationItem.topic) }}</td>
                 <td ng-click="removeTopic(topicItem)"><span class="glyphicon glyphicon-remove"></span></td>
             </tr>
         </tbody>
