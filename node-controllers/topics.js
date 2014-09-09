@@ -26,6 +26,7 @@ exports.getTopics = function (request, response, next, conString) {
 };
 
 exports.deleteTopic = function (request, response, next, conString) {
+    "use strict";
     // make sure the id is provided
     if (! request.params.id) {
         response.send({status: "error", msg: "No topic id provided"});
@@ -45,6 +46,7 @@ exports.deleteTopic = function (request, response, next, conString) {
 };
 
 exports.addTopic = function(request, response, next, conString) {
+    "use strict";
     // name must be specified for topic
     if (!request.body.name) {
         response.send({status: "error", msg: "Empty topic name provided"});

@@ -83,6 +83,11 @@ app.get("/refs", function (request, response, next) {
     console.log("hit refs GET endpoint");
     refs.getRefs(request, response, next, conString);
 });
+
+app.delete("/refs/:id", function (request, response, next) {
+    console.log("hit refs GET endpoint");
+    refs.deleteRef(request, response, next, conString);
+});
 /****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/

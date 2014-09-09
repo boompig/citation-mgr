@@ -26,6 +26,7 @@
                     <th>First Author</th>
                     <th>Year</th>
                     <th>Citation Number</th>
+                    <th><!-- for deletion --></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,7 @@
                     <td>{{ refItem.first_author }}</td>
                     <td>{{ refItem.year }}</td>
                     <td>{{ refItem.citation_num }}</td>
+                    <td ng-click="deleteRef(refItem)"><span class="glyphicon glyphicon-remove"></span></td>
                 </tr>
             </tbody>
         </table>
