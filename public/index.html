@@ -22,7 +22,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li ng-repeat="route in n.routes" ng-class="{active: n.isActive(path)}">
+                        <li ng-repeat="route in n.routes" ng-class="{active: n.isActive(route.link)}">
                             <a href="/#/{{ route.link }}">{{ route.name }}</a>
                         </li>
                     </ul>
