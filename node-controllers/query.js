@@ -12,8 +12,14 @@ exports.runQuery = function (request, response, next, conString) {
         return response.send({status: "error", msg: "Username not provided" });
     }
     if (request.body.name) {
+        var data;
         var query = "INSERT INTO queries (name, sql, username) VALUES ($1, $2, $3)";
-        var data = [request.body.name, request.body.sql, request.body.username];
+        if (request.body.public) {
+            console.log("inserting public query");
+            data = [request.body.name, request.body.sql, "public"];
+        } else {
+            data = [request.body.name, request.body.sql, request.body.username];
+        }
         // save the query asynchronously in the DB
         cruft.query(query, data, conString, function (err, result) {
             if (err) {
@@ -39,7 +45,7 @@ exports.getQueries = function (request, response, next, conString) {
     var query, data;
     if (request.query.username) {
         console.log("Getting queries as " + request.query.username);
-        query = "SELECT * FROM queries WHERE username=$1";
+        query = "SELECT * FROM queries WHERE username IN ($1, 'public')";
         data = [request.query.username];
     } else {
         query = "SELECT * FROM queries";

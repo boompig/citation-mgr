@@ -8,7 +8,8 @@ angular.module("citationControllers")
     $scope.queryData = {
         "username": $cookies.loginName,
         "sql": null,
-        "name": null
+        "name": null,
+        "public": false
     };
     /* last error msg */
     $scope.errorMsg = null;
@@ -45,7 +46,8 @@ angular.module("citationControllers")
                 $scope.queryData = {
                     name: null,
                     sql: $scope.queryData.sql,
-                    username: $cookies.loginName
+                    username: $cookies.loginName,
+                    public: false
                 };
             }
         });

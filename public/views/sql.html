@@ -10,6 +10,12 @@
         <label for="name">Query Name (optional)</label>
         <input type="text" class="form-control" name="name" ng-model="queryData.name" />
 
+        <div class="checkbox" ng-if="queryData.name">
+            <label>
+                <input type="checkbox" name="public" ng-model="queryData.public" /> Make Public
+            </label>
+        </div>
+
         <button class="btn btn-primary form-control" type="submit">Run Query</button>
     </form>
 
