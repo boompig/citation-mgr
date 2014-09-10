@@ -38,18 +38,8 @@ angular.module("citationControllers")
                 $scope.errorMsg = null;
                 $scope.lastResultStatus = true;
 
-                /* uniqueness checking */
-                var unique = true;
-                for (var i = 0; i < $scope.pastQueries.length; i++) {
-                    if ($scope.pastQueries[i].name === $scope.queryData.name &&
-                        $scope.pastQueries[i].sql === $scope.queryData.sql) {
-                        unique = false;
-                        break;
-                    }
-                }
-                if (unique) {
-                    $scope.pastQueries.push($scope.queryData);
-                }
+                // refetch saved queries
+                $scope.getPastQueries();
 
                 /* clone existing object, ish */
                 $scope.queryData = {

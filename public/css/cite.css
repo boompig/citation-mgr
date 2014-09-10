@@ -7,6 +7,16 @@
     text-align: center;
 }
 
+#query-instructions {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#query-instructions h4 {
+    margin: 2px auto;
+    text-align: center;
+}
+
 #query-page accordion .panel-heading {
     cursor: pointer;
 }

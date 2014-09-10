@@ -16,7 +16,7 @@
     <div ng-if="errorMsg" class="query-msg error">{{ errorMsg }}</div>
 
     <accordion close-others="oneAtATime">
-        <accordion-group heading="Past Queries ({{ pastQueries.length }})">
+        <accordion-group heading="Saved Queries ({{ pastQueries.length }})">
             <div ng-if="pastQueries.length">
                 <div ng-repeat="query in pastQueries">
                     <h4>
@@ -30,10 +30,15 @@
         </accordion-group>
     </accordion>
 
+    <div id="query-instructions" ng-if="resultList.length === 0 && lastResultStatus === null">
+        <h4>Instructions</h4>
+        <p>Write arbitrary queries over the citations database, grouping data in any way you like. Name queries to have them saved for future use. Expand the Saved Queries accordion to see these queries and rerun any of them.</p>
+    </div>
+
     <div ng-if="lastResultStatus">
         <h3 class="subpage-title">Results</h3>
 
-        <h4 class="emptyTableMsg" ng-if="resultList.length == 0">No results</h4>
+        <h4 class="emptyTableMsg" ng-if="resultList.length === 0">No results</h4>
 
         <table class="table table-striped table-condensed" ng-if="resultList.length">
             <thead>
