@@ -16,6 +16,22 @@ angular.module("citationControllers")
         });
     };
 
+    $scope.getRefs = function () {
+        $http.get("/refs", {username: $scope.username}).success(function(response, statusCode){
+            console.log("refs:");
+            console.log(response);
+            $scope.refList = response;
+        });
+    };
+
+    $scope.getSections = function () {
+        $http.get("/sections", {username: $scope.username}).success(function(response, statusCode){
+            console.log("sections:");
+            console.log(response);
+            $scope.sectionList = response;
+        });
+    };
+
     $scope.getTopic = function (topicID) {
         if (Object.keys($scope.topics).length === 0) {
             return null;
@@ -29,6 +45,7 @@ angular.module("citationControllers")
             console.log("topics:");
             // response is a list of topic objects in no particular order
             console.log(response);
+            $scope.topicList = response;
 
             // index topics by ID
             for (var i = 0; i < response.length; i++) {
@@ -39,4 +56,6 @@ angular.module("citationControllers")
 
     $scope.getLocations();
     $scope.getTopics();
+    $scope.getRefs();
+    $scope.getSections();
 }]);
