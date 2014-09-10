@@ -68,7 +68,7 @@ angular.module("citationControllers")
     };
 
     $scope.getRefList = function() {
-        $http.get("/refs", {username: $cookies.loginName}).success(function(response, statusCode) {
+        $http.get("/refs?username=" + $cookies.loginName).success(function(response) {
             console.log("refs:");
             console.log(response);
             $scope.refList = response;

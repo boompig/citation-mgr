@@ -27,7 +27,6 @@ exports.addRef = function(request, response, next, conString) {
 
 exports.getRefs = function (request, response, next, conString) {
     "use strict";
-
     var query, data;
     if (request.query.username) {
         query = "SELECT * FROM refs WHERE username=$1";

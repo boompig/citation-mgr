@@ -31,7 +31,7 @@ angular.module("citationControllers")
     };
 
     $scope.getLocations = function () {
-        $http.get("/locations", {username: $scope.username}).success(function(response, statusCode){
+        $http.get("/locations?username=" + $scope.username).success(function(response, statusCode){
             console.log("locations:");
             console.log(response);
             $scope.locationList = response;
@@ -39,7 +39,7 @@ angular.module("citationControllers")
     };
 
     $scope.getRefs = function () {
-        $http.get("/refs", {username: $scope.username}).success(function(response, statusCode){
+        $http.get("/refs?username=" + $scope.username).success(function(response, statusCode){
             console.log("refs:");
             console.log(response);
             $scope.refList = response;
@@ -47,7 +47,7 @@ angular.module("citationControllers")
     };
 
     $scope.getSections = function () {
-        $http.get("/sections", {username: $scope.username}).success(function(response, statusCode){
+        $http.get("/sections?username=" + $scope.username).success(function(response, statusCode){
             console.log("sections:");
             console.log(response);
             $scope.sectionList = response;

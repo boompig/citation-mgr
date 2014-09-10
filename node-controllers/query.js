@@ -36,9 +36,9 @@ exports.runQuery = function (request, response, next, conString) {
 
 exports.getQueries = function (request, response, next, conString) {
     "use strict";
-
     var query, data;
-    if (request.body.username) {
+    if (request.query.username) {
+        console.log("Getting queries as " + request.query.username);
         query = "SELECT * FROM queries WHERE username=$1";
         data = [request.query.username];
     } else {
