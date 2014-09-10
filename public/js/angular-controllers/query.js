@@ -79,7 +79,9 @@ angular.module("citationControllers")
         $http.get("/sql?username=" + $cookies.loginName).success(function (response) {
             console.log("Got past queries");
             console.log(response);
-            $scope.pastQueries = response;
+            if (response.status !== "error") {
+                $scope.pastQueries = response;
+            }
         });
     };
 
