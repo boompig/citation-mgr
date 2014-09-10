@@ -1,12 +1,34 @@
 angular.module("citationControllers")
-.controller("LocationCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function($scope, $route, $routeParams, $location, $http, $cookies) {
+.controller("LocationCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", "$modal", function($scope, $route, $routeParams, $location, $http, $cookies, $modal) {
     "use strict";
 
     $scope.username = $cookies.loginName;
 
     $scope.locationList = [];
+    $scope.refList = [];
+    $scope.topicList = [];
+    $scope.sectionList = [];
     /* map of topic IDs to topic objects */
     $scope.topics = {};
+
+    $scope.openModal = function () {
+        $modal.open({
+            templateUrl: "locationModalContent.html",
+            controller: "LocationCtrl" // myself
+        });
+    };
+
+    $scope.locationData = {
+        ref: "",
+        ref_quote: null,
+        section: "",
+        username: $scope.username,
+        topic: ""
+    };
+
+    $scope.submitRefLocation = function (e) {
+        console.log($scope.locationData);
+    };
 
     $scope.getLocations = function () {
         $http.get("/locations", {username: $scope.username}).success(function(response, statusCode){
