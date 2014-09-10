@@ -21,13 +21,14 @@
 
     <div ng-if="errorMsg" class="query-msg error">{{ errorMsg }}</div>
 
-    <accordion close-others="oneAtATime">
+    <accordion close-others="oneAtATime" id="saved-queries-accordion">
         <accordion-group heading="Saved Queries ({{ pastQueries.length }})">
             <div ng-if="pastQueries.length">
                 <div ng-repeat="query in pastQueries">
                     <h4>
                         <span class="label label-info" ng-click="rerunQuery(query)">Rerun</span>
                         <span ng-if="query.name">{{ query.name }}</span>
+                        <span class="glyphicon glyphicon-remove" ng-click="removeQuery(query)"></span>
                     </h5>
                     <p>{{ query.sql }}</p>
                 </div>

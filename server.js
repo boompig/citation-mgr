@@ -35,6 +35,11 @@ app.get("/sql", function (request, response, next) {
     console.log("Hit SQL GET endpoint");
     query.getQueries(request, response, next, conString);
 });
+
+app.delete("/sql/:id", function (request, response, next) {
+    console.log("Hit SQL DELETE endpoint");
+    query.deleteQuery(request, response, next, conString);
+});
 /********************* SQL **********************/
 
 /****************** LOGIN ******************************/

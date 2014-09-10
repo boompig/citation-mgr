@@ -1,9 +1,27 @@
 var pg = require("pg");
 var cruft = require("./pg_cruft.js");
 
+exports.deleteQuery = function (request, response, next, conString) {
+    "use strict";
+    // make sure the id is provided
+    if (! request.params.id) {
+        response.send({status: "error", msg: "No topic id provided"});
+        return console.error("Query ID not provided in request");
+    }
+    var query = "DELETE FROM queries WHERE id=$1";
+    var data = [request.params.id];
+    cruft.query(query, data, conString, function (err, result) {
+        if (err) {
+            return response.send({ status: "error", msg: err.toString() });
+        } else {
+            console.log("Deleted %d rows", result.rowCount);
+            response.send({ status: "success" });
+        }
+    });
+};
+
 exports.runQuery = function (request, response, next, conString) {
     "use strict";
-
     if (!request.body.sql) {
         console.error("query not provided");
         return response.send({status: "error", msg: "Query not provided" });

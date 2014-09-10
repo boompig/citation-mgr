@@ -24,10 +24,25 @@ angular.module("citationControllers")
         $scope.runQuery();
     };
 
+    $scope.removeQuery = function (queryItem) {
+        console.log("Removing query");
+        console.log(queryItem);
+        $http.delete("/sql/" + queryItem.id).success(function (response) {
+            console.log("response:");
+            console.log(response);
+            if (response.status === "success") {
+                var i = $scope.pastQueries.indexOf(queryItem);
+                if (i >= 0) {
+                    $scope.pastQueries.splice(i, 1);
+                }
+            }
+        });
+    };
+
     $scope.runQuery = function () {
         console.log("Running query");
         console.log($scope.queryData);
-        $http.post("/sql", $scope.queryData).success(function(response, statusCode) {
+        $http.post("/sql", $scope.queryData).success(function(response) {
             console.log("result:");
             console.log(response);
             if (response.hasOwnProperty("status") && response.status === "error") {
