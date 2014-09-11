@@ -12,17 +12,41 @@ exports.addRef = function(request, response, next, conString) {
         return console.error("username for ref not provided");
     }
 
-    var query = "INSERT INTO refs (name, first_author, year, citation_num, username) VALUES ($1, $2, $3, $4, $5) RETURNING id";
-    var data = [request.body.name, request.body.first_author, request.body.year, request.body.citation_num, request.body.username];
+    var query = "INSERT INTO refs (name, first_author, year, body_of_work, citation_num, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
+    var data;
 
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Inserted with ID", result.rows[0].id);
-            response.send({ status: "success", "insert_id": result.rows[0].id });
-        }
-    });
+    if (request.body.body_of_work) {
+        var bow_data = [request.body.body_of_work];
+        cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", bow_data, conString, function (err, result) {
+            if (err) {
+                // that's fine, just it's not unique
+            }
+            cruft.query("SELECT id FROM bodies_of_work WHERE name = $1", [request.body.body_of_work], conString, function(err, result) {
+                var body_of_work = result.rows[0].id;
+
+                data = [request.body.name, request.body.first_author, request.body.year, body_of_work, request.body.citation_num, request.body.username];
+                cruft.query(query, data, conString, function (err, result) {
+                    if (err) {
+                        console.error("Error when trying to insert into refs: %s", err.toString());
+                        return response.send({ status: "error", msg: err.toString() });
+                    } else {
+                        console.log("Inserted with ID", result.rows[0].id);
+                        response.send({ status: "success", "insert_id": result.rows[0].id });
+                    }
+                });
+            });
+        });
+    } else {
+        data = [request.body.name, request.body.first_author, request.body.year, request.body.body_of_work, request.body.citation_num, request.body.username];
+        cruft.query(query, data, conString, function (err, result) {
+            if (err) {
+                return response.send({ status: "error", msg: err.toString() });
+            } else {
+                console.log("Inserted with ID", result.rows[0].id);
+                response.send({ status: "success", "insert_id": result.rows[0].id });
+            }
+        });
+    }
 };
 
 exports.getRefs = function (request, response, next, conString) {

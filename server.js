@@ -21,6 +21,7 @@ var refs = require("./node-controllers/refs");
 var locations = require("./node-controllers/locations");
 var login = require("./node-controllers/login");
 var query = require("./node-controllers/query");
+var bow = require("./node-controllers/bow");
 
 // experimental
 var cruft = require("./node-controllers/pg_cruft.js");
@@ -54,7 +55,34 @@ app.get("/locations", function (request, response, next) {
     console.log("hit locations GET endpoint");
     return locations.getLocations(request, response, next, conString);
 });
+
+app.post("/locations", function (request, response, next) {
+    console.log("hit locations POST endpoint");
+    return locations.addLocation(request, response, next, conString);
+});
+
+app.delete("/locations/:id", function (request, response, next) {
+    console.log("hit locations DELETE endpoint");
+    return locations.deleteLocation(request, response, next, conString);
+});
 /****************** LOCATIONS ******************************/
+
+/****************** BOW ******************************/
+app.get("/bow", function (request, response, next) {
+    console.log("hit bow GET endpoint");
+    return bow.getWorks(request, response, next, conString);
+});
+
+app.delete("/bow/:id", function (request, response, next) {
+    console.log("hit bow DELETE endpoint");
+    return bow.deleteWork(request, response, next, conString);
+});
+
+app.post("/bow", function (request, response, next) {
+    console.log("hit bow POST endpoint");
+    return bow.addWork(request, response, next, conString);
+});
+/****************** BOW ******************************/
 
 /****************** TOPICS ******************************/
 app.get("/topics", function (request, response, next) {

@@ -9,6 +9,8 @@ angular.module("citationControllers")
         first_author: null,
         year: null,
         topic: null,
+        citation_num: null,
+        body_of_work: null,
         username: $cookies.loginName
     };
 
@@ -41,6 +43,8 @@ angular.module("citationControllers")
                     first_author: null,
                     year: null,
                     topic: null,
+                    citation_num: null,
+                    body_of_work: null,
                     username: $cookies.loginName
                 };
                 $scope.statusMsg = "Successfully added reference";

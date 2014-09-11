@@ -14,6 +14,9 @@
         <label for="year">Publication Year</label>
         <input type="number" class="form-control" name="year" ng-model="ref.year" />
 
+        <label for="body_of_work">Body of Work</label>
+        <input type="text" class="form-control" name="body_of_work" ng-model="ref.body_of_work" />
+
         <label for="citation_num">Citation Number</label>
         <input type="number" class="form-control" name="citation_num" ng-model="ref.citation_num" />
 
@@ -29,6 +32,7 @@
                     <th>Name</th>
                     <th>First Author</th>
                     <th>Year</th>
+                    <th>Body of Work</th>
                     <th>Citation Number</th>
                     <th><!-- for deletion --></th>
                 </tr>
@@ -38,6 +42,7 @@
                     <td>{{ refItem.name }}</td>
                     <td>{{ refItem.first_author }}</td>
                     <td>{{ refItem.year }}</td>
+                    <td>{{ refItem.body_of_work }}</td>
                     <td>{{ refItem.citation_num }}</td>
                     <td ng-click="deleteRef(refItem)"><span class="glyphicon glyphicon-remove"></span></td>
                 </tr>

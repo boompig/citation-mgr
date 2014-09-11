@@ -15,6 +15,7 @@ exports.getSections = function (request, response, next, conString) {
         query = "SELECT * FROM sections";
         data = [];
     }
+
     cruft.query(query, data, conString, function (err, result) {
         if (err) {
             return response.send({ status: "error", msg: err.toString() });
@@ -54,16 +55,29 @@ exports.addSection = function(request, response, next, conString) {
     } else if (!request.body.username) {
         response.send({status: "error", msg: "username for section not provided"});
         return console.error("username for section not provided");
+    } else if (!request.body.body_of_work) {
+        response.send({status: "error", msg: "body of work for section not provided"});
+        return console.error("body of work for section not provided");
     }
 
-    var query = "INSERT INTO sections (name, section_number, username) VALUES ($1, $2, $3) RETURNING id";
-    var data = [request.body.name, request.body.section_number, request.body.username];
-    cruft.query(query, data, conString, function (err, result) {
+    var query = "INSERT INTO sections (name, section_number, body_of_work, username) VALUES ($1, $2, $3, $4) RETURNING id";
+    var data;
+
+    cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", [request.body.body_of_work], conString, function (err, result) {
         if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Inserted with ID", result.rows[0].id);
-            response.send({ status: "success", "insert_id": result.rows[0].id });
+            // ignore error, because duplicates
         }
+        cruft.query("SELECT id FROM bodies_of_work WHERE name = $1", [request.body.body_of_work], conString, function (err, result) {
+            var body_of_work = result.rows[0].id;
+            data = [request.body.name, request.body.section_number, body_of_work, request.body.username];
+            cruft.query(query, data, conString, function (err, result) {
+                if (err) {
+                    return response.send({ status: "error", msg: err.toString() });
+                } else {
+                    console.log("Inserted with ID", result.rows[0].id);
+                    response.send({ status: "success", "insert_id": result.rows[0].id });
+                }
+            });
+        });
     });
 };

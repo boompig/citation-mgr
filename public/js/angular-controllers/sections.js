@@ -9,11 +9,16 @@ angular.module("citationControllers")
     $scope.sectionData = {
         name: null,
         section_number: null,
+        body_of_work: null,
         username: $cookies.loginName
     };
 
     /* sections in DB */
     $scope.sectionList = [];
+
+    $scope.getBodyOfWork = function (sectionItem) {
+        return sectionItem.body_of_work;
+    };
 
     $scope.removeSection = function(sectionItem) {
         console.log("removing section");
@@ -47,6 +52,7 @@ angular.module("citationControllers")
                 $scope.sectionData = {
                     name: null,
                     section_number: null,
+                    body_of_work: null,
                     username: $cookies.loginName
                 };
             } else {
