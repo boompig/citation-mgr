@@ -6,7 +6,7 @@ angular.module("citationControllers")
         {"link": "refs", "name": "References"},
         {"link": "topics", "name": "Topics"},
         {"link": "sections", "name": "Thesis Sections"},
-        {"link": "locations", "name": "Reference Locations"},
+        {"link": "locations", "name": "Notes"},
         {"link": "sql", "name": "SQL"}
     ];
 
