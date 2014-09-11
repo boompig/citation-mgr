@@ -26,7 +26,8 @@
             <div ng-if="pastQueries.length">
                 <div ng-repeat="query in pastQueries">
                     <h4>
-                        <span class="label label-info" ng-click="rerunQuery(query)">Rerun</span>
+                        <span class="rerun-query-btn btn btn-primary" ng-click="rerunQuery(query)">Rerun</span>
+                        <span class="label label-warning" ng-if="query.username === 'public'">Public</span>
                         <span ng-if="query.name">{{ query.name }}</span>
                         <span class="glyphicon glyphicon-remove" ng-click="removeQuery(query)"></span>
                     </h5>

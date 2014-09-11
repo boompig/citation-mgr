@@ -2,6 +2,10 @@
     height: 50px;
 }
 
+.rerun-query-btn {
+    height: 60%;
+}
+
 #saved-queries-accordion .glyphicon-remove {
     float: right;
 }
@@ -31,7 +35,7 @@
 
 #query-page accordion .label {
     margin-right: 2px;
-    cursor: pointer;
+    font-size: 0.7em;
 }
 
 .query-form {
