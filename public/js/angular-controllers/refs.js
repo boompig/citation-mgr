@@ -7,6 +7,7 @@ angular.module("citationControllers")
     $scope.ref = {
         name: null,
         first_author: null,
+        author_group: null,
         year: null,
         topic: null,
         citation_num: null,
@@ -41,6 +42,7 @@ angular.module("citationControllers")
                 $scope.ref = {
                     name: null,
                     first_author: null,
+                    author_group: null,
                     year: null,
                     topic: null,
                     citation_num: null,

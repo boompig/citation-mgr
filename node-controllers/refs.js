@@ -12,7 +12,7 @@ exports.addRef = function(request, response, next, conString) {
         return console.error("username for ref not provided");
     }
 
-    var query = "INSERT INTO refs (name, first_author, year, body_of_work, citation_num, username) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
+    var query = "INSERT INTO refs (name, first_author, author_group, year, body_of_work, citation_num, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
     var data;
 
     if (request.body.body_of_work) {
@@ -24,7 +24,7 @@ exports.addRef = function(request, response, next, conString) {
             cruft.query("SELECT id FROM bodies_of_work WHERE name = $1", [request.body.body_of_work], conString, function(err, result) {
                 var body_of_work = result.rows[0].id;
 
-                data = [request.body.name, request.body.first_author, request.body.year, body_of_work, request.body.citation_num, request.body.username];
+                data = [request.body.name, request.body.first_author, request.body.author_group, request.body.year, body_of_work, request.body.citation_num, request.body.username];
                 cruft.query(query, data, conString, function (err, result) {
                     if (err) {
                         console.error("Error when trying to insert into refs: %s", err.toString());
@@ -37,7 +37,7 @@ exports.addRef = function(request, response, next, conString) {
             });
         });
     } else {
-        data = [request.body.name, request.body.first_author, request.body.year, request.body.body_of_work, request.body.citation_num, request.body.username];
+        data = [request.body.name, request.body.first_author, request.body.author_group, request.body.year, request.body.body_of_work, request.body.citation_num, request.body.username];
         cruft.query(query, data, conString, function (err, result) {
             if (err) {
                 return response.send({ status: "error", msg: err.toString() });
