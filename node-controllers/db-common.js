@@ -23,18 +23,15 @@ const knex = require("knex")({
 const bookshelf = require("bookshelf")(knex);
 
 // utilities
-const createTableIfNotExists = (tableName, createTableFn) => {
-    knex.schema.hasTable(tableName)
-        .then((exists) => {
-            if (!exists) {
-                console.log(`Table ${tableName} does not exist, creating...`);
-                knex.schema.createTable(tableName, (table) => {
-                    return createTableFn(table);
-                }).then(() => {
-                    console.log(`Created table ${tableName}`);
-                });
-            }
+const createTableIfNotExists = async (tableName, createTableFn) => {
+    const exists = await knex.schema.hasTable(tableName);
+    if (!exists) {
+        console.log(`Table ${tableName} does not exist, creating...`);
+        await knex.schema.createTable(tableName, (table) => {
+            return createTableFn(table);
         });
+        console.log(`Created table ${tableName}`);
+    }
 };
 
 // set up tables here
@@ -62,50 +59,51 @@ const Topic = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
-// create tables here
-createTableIfNotExists(usersTable, (table) => {
-    table.increments();
-    table.string("name").unique().notNullable();
-    table.boolean("is_admin").notNullable.defaultTo(false);
-    table.timestamps();
-});
+const createTables = async () => {
+    // create tables here
+    await createTableIfNotExists(usersTable, (table) => {
+        table.increments();
+        table.string("name").unique().notNullable();
+        table.boolean("is_admin").notNullable.defaultTo(false);
+        table.timestamps();
+    });
 
-createTableIfNotExists(topicsTable, (table) => {
-    table.increments();
-    table.string("name").unique().notNullable();
-    table.string("description");
+    await createTableIfNotExists(topicsTable, (table) => {
+        table.increments();
+        table.string("name").unique().notNullable();
+        table.string("description");
 
-    table.string("username")
-        .notNullable()
-        .references("name").inTable(usersTable).onDelete("cascade");
-    table.timestamps();
-});
+        table.string("username")
+            .notNullable()
+            .references("name").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
 
-createTableIfNotExists(bowTable, (table) => {
-    table.increments();
-    table.string("name").unique().notNullable();
-    table.timestamps();
-});
+    await createTableIfNotExists(bowTable, (table) => {
+        table.increments();
+        table.string("name").unique().notNullable();
+        table.timestamps();
+    });
 
-createTableIfNotExists(refsTable, (table) => {
-    table.increments();
+    await createTableIfNotExists(refsTable, (table) => {
+        table.increments();
 
-    // primary characteristics of the table
-    table.string("name").notNullable();
-    table.string("first_author");
-    table.string("author_group");
-    table.integer("year");
-    table.foreign("body_of_work").references("id").inTable(bowTable)
-        .onDelete("cascade");
-    table.integer("citation_num");
+        // primary characteristics of the table
+        table.string("name").notNullable();
+        table.string("first_author");
+        table.string("author_group");
+        table.integer("year");
+        table.foreign("body_of_work").references("id").inTable(bowTable)
+            .onDelete("cascade");
+        table.integer("citation_num");
 
-    table.string("username")
-        .notNullable()
-        .references("name").inTable(usersTable).onDelete("cascade");
+        table.string("username")
+            .notNullable()
+            .references("name").inTable(usersTable).onDelete("cascade");
 
-    table.timestamps();
-});
-
+        table.timestamps();
+    });
+};
 
 // exports
 module.exports = {
@@ -115,4 +113,5 @@ module.exports = {
     Reference: Reference,
     BodyOfWork: BodyOfWork,
     Topic: Topic,
+    createTables: createTables
 };

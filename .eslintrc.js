@@ -6,7 +6,8 @@ module.exports = {
 	"parserOptions": {
 		"ecmaVersion": 2017
 	},
-    "extends": "eslint:recommended",
+	"plugins": ["jest"],
+    "extends": ["eslint:recommended", "plugin:jest/recommended"],
     "rules": {
         "indent": [
             "error",
@@ -24,6 +25,8 @@ module.exports = {
             "error",
             "always"
         ],
-		"no-console": "off"
+		"no-console": "off",
+		"prefer-const": ["error"],
+		"no-var": ["error"]
     }
 };

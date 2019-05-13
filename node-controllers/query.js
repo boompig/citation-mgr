@@ -6,8 +6,8 @@ exports.deleteQuery = function (request, response, next, conString) {
         response.send({status: "error", msg: "No topic id provided"});
         return console.error("Query ID not provided in request");
     }
-    var query = "DELETE FROM queries WHERE id=$1";
-    var data = [request.params.id];
+    const query = "DELETE FROM queries WHERE id=$1";
+    const data = [request.params.id];
     cruft.query(query, data, conString, function (err, result) {
         if (err) {
             return response.send({ status: "error", msg: err.toString() });
@@ -28,8 +28,8 @@ exports.runQuery = function (request, response, next, conString) {
         return response.send({status: "error", msg: "Username not provided" });
     }
     if (request.body.name) {
-        var data;
-        var query = "INSERT INTO queries (name, sql, username) VALUES ($1, $2, $3)";
+        let data;
+        const query = "INSERT INTO queries (name, sql, username) VALUES ($1, $2, $3)";
         if (request.body.public) {
             console.log("inserting public query");
             data = [request.body.name, request.body.sql, "public"];
@@ -57,8 +57,7 @@ exports.runQuery = function (request, response, next, conString) {
 };
 
 exports.getQueries = function (request, response, next, conString) {
-    "use strict";
-    var query, data;
+    let query, data;
     if (request.query.username) {
         console.log("Getting queries as " + request.query.username);
         query = "SELECT * FROM queries WHERE username IN ($1, 'public')";

@@ -6,7 +6,8 @@ const app = express();
 const morgan = require("morgan");
 app.use(morgan("dev"));
 
-const conString = require("./node-controllers/db-common").conString;
+const dbCommon = require("./node-controllers/db-common");
+const conString = dbCommon.conString;
 
 /* read port from environment variable if set
  * this is for Heroku */
@@ -68,10 +69,8 @@ app.delete("/locations/:id", function (request, response, next) {
 /****************** BOW ******************************/
 app.get("/bow", bow.getWorks);
 
-app.delete("/bow/:id", function (request, response, next) {
-    console.log("hit bow DELETE endpoint");
-    return bow.deleteWork(request, response, next, conString);
-});
+app.delete("/bow/:id", bow.deleteById);
+app.delete("/bow", bow.deleteByName);
 
 app.post("/bow", function (request, response, next) {
     console.log("hit bow POST endpoint");
@@ -81,24 +80,16 @@ app.post("/bow", function (request, response, next) {
 
 /****************** TOPICS ******************************/
 app.get("/topics", topics.getTopics);
-
 app.delete("/topics/:id", topics.deleteTopic);
-
+app.delete("/topics", topics.deleteTopicByName);
 app.post("/topics", topics.addTopic);
 /****************** TOPICS ******************************/
 
 /****************** REFS ******************************/
-app.post("/refs", function (request, response, next) {
-    console.log("hit refs POST endpoint");
-    refs.addRef(request, response, next, conString);
-});
-
+app.post("/refs", refs.addRef);
 app.get("/refs", refs.getRefs);
-
-app.delete("/refs/:id", function (request, response, next) {
-    console.log("hit refs GET endpoint");
-    refs.deleteRef(request, response, next, conString);
-});
+app.delete("/refs/:id", refs.deleteById);
+app.delete("/refs", refs.deleteByName);
 /****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/
@@ -118,7 +109,16 @@ app.delete("/sections/:id", function(request, response, next) {
 });
 /****************** SECTIONS ******************************/
 
-app.listen(port, () => {
-    console.log(`running on http://localhost:${port}`);
-});
+// if(process.env.NODE_ENV !== "unit-test") {
+// do not run database setup when unit testing
+// console.log(`[${process.env.NODE_ENV}] Running database setup...`);
+// await dbCommon.createTables();
+// }
 
+if(process.env.NODE_ENV !== "unit-test") {
+    app.listen(port, () => {
+        console.log(`running on http://localhost:${port}`);
+    });
+}
+
+module.exports = app;

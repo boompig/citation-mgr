@@ -14,6 +14,32 @@ exports.getTopics = async (req, res) => {
     return res.json(topics).end();
 };
 
+// TODO: add some security here
+exports.deleteTopicByName = async (req, res) => {
+    // make sure the name is provided
+    if (!req.query.name) {
+        return res.status(400).json({
+            status: "error",
+            msg: "No topic name provided"
+        });
+    }
+    console.log(`Deleting topic with name ${req.query.name}`);
+    const topic = await Topic.where({name: req.query.name}).fetch();
+    if (topic) {
+        await topic.destroy();
+        return res.json({
+            status: "success",
+            msg: "deleted topic"
+        });
+    } else {
+        console.error(`No topic with name ${req.query.name}`);
+        return res.status(404).json({
+            status: "error",
+            msg: `No topic with name ${req.query.name}`
+        });
+    }
+};
+
 exports.deleteTopic = async (req, res) => {
     // make sure the id is provided
     if (!req.params.id) {
@@ -69,8 +95,8 @@ exports.addTopic = async (req, res) => {
             insert_id: topicID
         });
     } catch(e) {
-        console.error(`Failed to add topic with name ${req.body.name}`);
-        return res.json({
+        console.error(`Failed to add topic with duplicate name ${req.body.name}`);
+        return res.status(500).json({
             status: "error",
             msg: `Failed to add topic with duplicate name ${req.body.name}`
         });
