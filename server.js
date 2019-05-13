@@ -2,9 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-/* read postgres connection string from env variables if set
- * this is for Heroku */
-const conString = process.env.DATABASE_URL || "postgres://gru@localhost/citations";
+// set up logging
+const morgan = require("morgan");
+app.use(morgan("dev"));
+
+const conString = require("./node-controllers/db-common").conString;
+
 /* read port from environment variable if set
  * this is for Heroku */
 const port = process.env.PORT || 8080;
@@ -23,10 +26,8 @@ const login = require("./node-controllers/login");
 const query = require("./node-controllers/query");
 const bow = require("./node-controllers/bow");
 
-// experimental
-//const cruft = require("./node-controllers/pg_cruft.js");
-
 /********************* SQL **********************/
+// NOTE: this is super unsafe but that's fine for now
 app.post("/sql", function (request, response, next) {
     console.log("Hit SQL POST endpoint");
     query.runQuery(request, response, next, conString);
@@ -44,10 +45,7 @@ app.delete("/sql/:id", function (request, response, next) {
 /********************* SQL **********************/
 
 /****************** LOGIN ******************************/
-app.post("/login", function (request, response, next) {
-    console.log("Hit login POST endpoint");
-    login.addUser(request, response, next, conString);
-});
+app.post("/login", login.addUser);
 /****************** LOGIN ******************************/
 
 /****************** LOCATIONS ******************************/
@@ -68,10 +66,7 @@ app.delete("/locations/:id", function (request, response, next) {
 /****************** LOCATIONS ******************************/
 
 /****************** BOW ******************************/
-app.get("/bow", function (request, response, next) {
-    console.log("hit bow GET endpoint");
-    return bow.getWorks(request, response, next, conString);
-});
+app.get("/bow", bow.getWorks);
 
 app.delete("/bow/:id", function (request, response, next) {
     console.log("hit bow DELETE endpoint");
@@ -85,20 +80,11 @@ app.post("/bow", function (request, response, next) {
 /****************** BOW ******************************/
 
 /****************** TOPICS ******************************/
-app.get("/topics", function (request, response, next) {
-    console.log("hit topics GET endpoint");
-    return topics.getTopics(request, response, next, conString);
-});
+app.get("/topics", topics.getTopics);
 
-app.delete("/topics/:id", function (request, response, next) {
-    console.log("hit topics DELETE endpoint");
-    return topics.deleteTopic(request, response, next, conString);
-});
+app.delete("/topics/:id", topics.deleteTopic);
 
-app.post("/topics", function (request, response, next) {
-    console.log("hit topics POST endpoint");
-    return topics.addTopic(request, response, next, conString);
-});
+app.post("/topics", topics.addTopic);
 /****************** TOPICS ******************************/
 
 /****************** REFS ******************************/
@@ -107,10 +93,7 @@ app.post("/refs", function (request, response, next) {
     refs.addRef(request, response, next, conString);
 });
 
-app.get("/refs", function (request, response, next) {
-    console.log("hit refs GET endpoint");
-    refs.getRefs(request, response, next, conString);
-});
+app.get("/refs", refs.getRefs);
 
 app.delete("/refs/:id", function (request, response, next) {
     console.log("hit refs GET endpoint");

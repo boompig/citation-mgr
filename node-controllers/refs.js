@@ -1,72 +1,69 @@
 var cruft = require("./pg_cruft.js");
+const dbCommon = require("./db-common");
+const Reference = dbCommon.Reference;
+const BodyOfWork = dbCommon.BodyOfWork;
 
-exports.addRef = function(request, response, next, conString) {
-    "use strict";
+exports.addRef = async (req, res) => {
     // name must be specified for ref
-    if (!request.body.name) {
-        response.send({status: "error", msg: "Empty ref name provided"});
-        return console.error("Empty ref name");
-    } else if (!request.body.username) {
-        response.send({status: "error", msg: "username for ref not provided"});
-        return console.error("username for ref not provided");
+    if (!req.body.name) {
+        return res.json({
+            status: "error",
+            msg: "Empty ref name provided"
+        });
+    } else if (!req.body.username) {
+        return res.send({
+            status: "error",
+            msg: "username for ref not provided"
+        });
     }
 
-    var query = "INSERT INTO refs (name, first_author, author_group, year, body_of_work, citation_num, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
-    var data;
+    let bowID = null;
 
-    if (request.body.body_of_work) {
-        var bow_data = [request.body.body_of_work];
-        cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", bow_data, conString, function (err) {
-            if (err) {
-                // that's fine, just it's not unique
-            }
-            cruft.query("SELECT id FROM bodies_of_work WHERE name = $1", [request.body.body_of_work], conString, function(err, result) {
-                var body_of_work = result.rows[0].id;
-
-                data = [request.body.name, request.body.first_author, request.body.author_group, request.body.year, body_of_work, request.body.citation_num, request.body.username];
-                cruft.query(query, data, conString, function (err, result) {
-                    if (err) {
-                        console.error("Error when trying to insert into refs: %s", err.toString());
-                        return response.send({ status: "error", msg: err.toString() });
-                    } else {
-                        console.log("Inserted with ID", result.rows[0].id);
-                        response.send({ status: "success", "insert_id": result.rows[0].id });
-                    }
-                });
+    if(req.body.body_of_work) {
+        // create the body of work
+        let bow = await BodyOfWork.where({name: req.body.body_of_work}).fetchOne({required: true});
+        if(!bow) {
+            bow = new BodyOfWork({
+                name: req.body.body_of_work
             });
-        });
-    } else {
-        data = [request.body.name, request.body.first_author, request.body.author_group, request.body.year, request.body.body_of_work, request.body.citation_num, request.body.username];
-        cruft.query(query, data, conString, function (err, result) {
-            if (err) {
-                return response.send({ status: "error", msg: err.toString() });
-            } else {
-                console.log("Inserted with ID", result.rows[0].id);
-                response.send({ status: "success", "insert_id": result.rows[0].id });
-            }
-        });
+            console.log(`Creating new BoW with name ${req.body.body_of_work}...`);
+            await bow.save();
+            bowID = bow.get("id");
+            console.log(`BoW ID is ${bowID}`);
+        } else {
+            bowID = bow.get("id");
+            console.log(`BoW already exists and has ID ${bowID}`);
+        }
     }
+
+    const ref = new Reference({
+        name: req.body.name,
+        first_author: req.body.first_author,
+        author_group: req.body.author_group,
+        year: req.body.year,
+        body_of_work: bowID,
+        citation_num: req.body.citation_num,
+        username: req.body.username
+    });
+
+    await ref.save();
+    return res.json({
+        status: "success",
+        msg: "Saved reference",
+    });
 };
 
-exports.getRefs = function (request, response, next, conString) {
-    "use strict";
-    var query, data;
-    if (request.query.username) {
-        query = "SELECT * FROM refs WHERE username=$1";
-        data = [request.query.username];
-        console.log("Fetching all refs for user %s", request.query.username);
+exports.getRefs = async (req, res) => {
+    let refs = [];
+    if (req.query.username) {
+        console.log(`Fetching all refs for user ${req.query.username}...`);
+        refs = await Reference.where({username: req.query.username}).fetchAll();
     } else {
-        query = "SELECT * FROM refs";
-        data = [];
+        console.log("Fetching all refs for all users...");
+        refs = await Reference.fetchAll();
     }
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Wrote %d rows out", result.rows.length);
-            response.send(result.rows);
-        }
-    });
+    console.log(`Pulled ${refs.length} references`);
+    return res.json(refs);
 };
 
 exports.deleteRef = function (request, response, next, conString) {
