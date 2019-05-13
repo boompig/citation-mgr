@@ -1,4 +1,4 @@
-var pg = require("pg");
+const pg = require("pg");
 
 exports.query = function (query, data, conString, callback) {
     // fetch all the refs from the DB

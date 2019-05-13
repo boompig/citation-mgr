@@ -1,8 +1,6 @@
-var pg = require("pg");
-var cruft = require("./pg_cruft.js");
+const cruft = require("./pg_cruft.js");
 
 exports.deleteQuery = function (request, response, next, conString) {
-    "use strict";
     // make sure the id is provided
     if (! request.params.id) {
         response.send({status: "error", msg: "No topic id provided"});
@@ -39,7 +37,7 @@ exports.runQuery = function (request, response, next, conString) {
             data = [request.body.name, request.body.sql, request.body.username];
         }
         // save the query asynchronously in the DB
-        cruft.query(query, data, conString, function (err, result) {
+        cruft.query(query, data, conString, function (err) {
             if (err) {
                 return console.error("error running insert query: ", err.toString());
             } else {

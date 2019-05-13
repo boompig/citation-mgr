@@ -1,13 +1,13 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var app = express();
-var pg = require("pg");
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+
 /* read postgres connection string from env variables if set
  * this is for Heroku */
-var conString = process.env.DATABASE_URL || "postgres://gru@localhost/citations";
+const conString = process.env.DATABASE_URL || "postgres://gru@localhost/citations";
 /* read port from environment variable if set
  * this is for Heroku */
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
@@ -15,16 +15,16 @@ app.use(bodyParser.json());
 /**
  * One controller for each endpoint
  */
-var topics = require("./node-controllers/topics");
-var sections = require("./node-controllers/sections");
-var refs = require("./node-controllers/refs");
-var locations = require("./node-controllers/locations");
-var login = require("./node-controllers/login");
-var query = require("./node-controllers/query");
-var bow = require("./node-controllers/bow");
+const topics = require("./node-controllers/topics");
+const sections = require("./node-controllers/sections");
+const refs = require("./node-controllers/refs");
+const locations = require("./node-controllers/locations");
+const login = require("./node-controllers/login");
+const query = require("./node-controllers/query");
+const bow = require("./node-controllers/bow");
 
 // experimental
-var cruft = require("./node-controllers/pg_cruft.js");
+//const cruft = require("./node-controllers/pg_cruft.js");
 
 /********************* SQL **********************/
 app.post("/sql", function (request, response, next) {
@@ -135,6 +135,7 @@ app.delete("/sections/:id", function(request, response, next) {
 });
 /****************** SECTIONS ******************************/
 
-app.listen(port);
+app.listen(port, () => {
+    console.log(`running on http://localhost:${port}`);
+});
 
-console.log("Node-express app running on port 8080");

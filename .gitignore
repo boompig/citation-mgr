@@ -1,4 +1,10 @@
+# auto-generated
 node_modules
 public/bower_components
 *.log
+
+# editor
 *.sublime-*
+.vscode
+.vimrc
+*.code-workspace

@@ -1,4 +1,4 @@
-var pg = require("pg");
+const pg = require("pg");
 
 /**
  * This endpoint is for logging in as a specific user
@@ -23,12 +23,19 @@ exports.addUser = function (request, response, next, conString) {
                 });
             } else {
                 console.log("Login %s does not exist, creating...", request.body.name);
-                client.query("INSERT INTO users (name) VALUES ($1)", [request.body.name], function(err, result) {
+                client.query("INSERT INTO users (name) VALUES ($1)", [request.body.name], function(err) {
                     done();
-                    console.log("Created.");
-                    response.send({
-                        status: "success"
-                    });
+                    if(err) {
+                        return response.send({
+                            status: "error",
+                            msg: "failed to insert user into database"
+                        }).status(500).end();
+                    } else {
+                        console.log("Created.");
+                        response.send({
+                            status: "success"
+                        });
+                    }
                 });
             }
         });

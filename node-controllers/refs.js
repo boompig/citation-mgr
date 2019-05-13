@@ -1,4 +1,3 @@
-var pg = require("pg");
 var cruft = require("./pg_cruft.js");
 
 exports.addRef = function(request, response, next, conString) {
@@ -17,7 +16,7 @@ exports.addRef = function(request, response, next, conString) {
 
     if (request.body.body_of_work) {
         var bow_data = [request.body.body_of_work];
-        cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", bow_data, conString, function (err, result) {
+        cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", bow_data, conString, function (err) {
             if (err) {
                 // that's fine, just it's not unique
             }

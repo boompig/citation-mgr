@@ -1,4 +1,3 @@
-var pg = require("pg");
 var cruft = require("./pg_cruft.js");
 
 /*
@@ -63,7 +62,7 @@ exports.addSection = function(request, response, next, conString) {
     var query = "INSERT INTO sections (name, section_number, body_of_work, username) VALUES ($1, $2, $3, $4) RETURNING id";
     var data;
 
-    cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", [request.body.body_of_work], conString, function (err, result) {
+    cruft.query("INSERT INTO bodies_of_work (name) VALUES ($1)", [request.body.body_of_work], conString, function (err) {
         if (err) {
             // ignore error, because duplicates
         }

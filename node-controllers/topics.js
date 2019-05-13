@@ -1,4 +1,3 @@
-var pg = require("pg");
 var cruft = require("./pg_cruft.js");
 
 /*

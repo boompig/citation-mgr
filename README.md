@@ -23,3 +23,7 @@ For complicated queries, drop down to postgres and write your own SQL.
 * cd into the directory where you cloned the repo and run `yarn install`
 * from the same directory, run `yarn start`
 * leave this terminal window running, server is running on port 8080
+
+### Development
+
+`nodemon`

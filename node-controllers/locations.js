@@ -1,5 +1,4 @@
-var pg = require("pg");
-var cruft = require("./pg_cruft.js");
+const cruft = require("./pg_cruft.js");
 
 exports.addLocation = function(request, response, next, conString) {
     if (!request.body.username) {
@@ -7,8 +6,8 @@ exports.addLocation = function(request, response, next, conString) {
         return console.error("username for section not provided");
     }
 
-    var query = "INSERT INTO locations (ref, section, quote, ref_quote, body_of_work, topic, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
-    var data = [request.body.ref, request.body.section, request.body.quote, request.body.ref_quote, request.body.body_of_work, request.body.topic, request.body.username];
+    const query = "INSERT INTO locations (ref, section, quote, ref_quote, body_of_work, topic, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
+    const data = [request.body.ref, request.body.section, request.body.quote, request.body.ref_quote, request.body.body_of_work, request.body.topic, request.body.username];
 
     cruft.query(query, data, conString, function(err, result) {
         if (err) {
