@@ -27,3 +27,8 @@ For complicated queries, drop down to postgres and write your own SQL.
 ### Development
 
 `nodemon`
+
+### Testing
+
+1. Set up the postgres database locally (unfortunately not mocked out)
+2. `yarn test`
