@@ -14,8 +14,8 @@ For complicated queries, drop down to postgres and write your own SQL.
 
 ### Create local database fixtures
 
-* currently, DB schema is not checked into the source
-* have to request access to production Heroku DB, then `heroku pg:pull`
+* currently, DB schema is not checked into the source. However you can read `node-controllers/db-common.js` for some of the schema.
+* You can also request access to production Heroku DB, then `heroku pg:pull`
 
 ### Get web server locally
 
@@ -27,3 +27,8 @@ For complicated queries, drop down to postgres and write your own SQL.
 ### Development
 
 `nodemon`
+
+### Testing
+
+1. Set up the postgres database locally (unfortunately not mocked out)
+2. `yarn test`

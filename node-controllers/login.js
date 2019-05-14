@@ -1,43 +1,46 @@
-const pg = require("pg");
+const User = require("./db-common").User;
 
 /**
  * This endpoint is for logging in as a specific user
  * There is no real security (no password)
  * Create the user and walk right in
  */
-exports.addUser = function (request, response, next, conString) {
-    if (! request.body.name) {
-        return console.error("Login name not specified");
+exports.addUser = async (req, res) => {
+    if (!req.body.name) {
+        return res.status(400).json({
+            status: "error",
+            msg: "name parameter is required but not specified"
+        }).end();
     }
-    pg.connect(conString, function (err, client, done) {
-        if (err) {
-            response.send({"status": "error", "msg": "failed to connect to postgres server"});
-            return console.error("failed connecting to PG server.");
-        }
-        client.query("SELECT * FROM users where name=$1", [request.body.name], function(err, result) {
-            if (result.rows.length === 1) {
-                console.log("Login %s exists", request.body.name);
-                done();
-                response.send({
-                    status: "success"
-                });
-            } else {
-                console.log("Login %s does not exist, creating...", request.body.name);
-                client.query("INSERT INTO users (name) VALUES ($1)", [request.body.name], function(err) {
-                    done();
-                    if(err) {
-                        return response.send({
-                            status: "error",
-                            msg: "failed to insert user into database"
-                        }).status(500).end();
-                    } else {
-                        console.log("Created.");
-                        response.send({
-                            status: "success"
-                        });
-                    }
-                });
-            }
+
+    try {
+        const user = await User.where({name: req.body.name}).fetch();
+        return res.json({
+            status: "success",
+            msg: `logged in as ${req.body.name}`,
+            is_admin: user.is_admin
         });
-    });
+    } catch(e) {
+        console.warn(`Failed to locate user with name ${req.body.name}`);
+        // return res.status(401).json({
+        //     status: "error",
+        //     msg: `Failed to locate user with name ${req.body.name}`,
+        // }).end();
+
+        // create the user
+        // note that the user will *not* have admin rights here
+
+        const user = new User({
+            name: req.body.name,
+            is_admin: false,
+        });
+        console.log("saving user...");
+
+        await user.save();
+
+        return res.json({
+            status: "success",
+            msg: `created new user with name ${req.body.name}`,
+        }).end();
+    }
 };

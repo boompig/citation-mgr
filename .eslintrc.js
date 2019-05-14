@@ -2,8 +2,12 @@ module.exports = {
     "env": {
         "es6": true,
         "node": true
-    },
-    "extends": "eslint:recommended",
+	},
+	"parserOptions": {
+		"ecmaVersion": 2017
+	},
+	"plugins": ["jest"],
+    "extends": ["eslint:recommended", "plugin:jest/recommended"],
     "rules": {
         "indent": [
             "error",
@@ -21,6 +25,8 @@ module.exports = {
             "error",
             "always"
         ],
-		"no-console": "off"
+		"no-console": "off",
+		"prefer-const": ["error"],
+		"no-var": ["error"]
     }
 };

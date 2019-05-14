@@ -2,9 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-/* read postgres connection string from env variables if set
- * this is for Heroku */
-const conString = process.env.DATABASE_URL || "postgres://gru@localhost/citations";
+// set up logging
+const morgan = require("morgan");
+app.use(morgan("dev"));
+
+const dbCommon = require("./node-controllers/db-common");
+const conString = dbCommon.conString;
+
 /* read port from environment variable if set
  * this is for Heroku */
 const port = process.env.PORT || 8080;
@@ -23,10 +27,8 @@ const login = require("./node-controllers/login");
 const query = require("./node-controllers/query");
 const bow = require("./node-controllers/bow");
 
-// experimental
-//const cruft = require("./node-controllers/pg_cruft.js");
-
 /********************* SQL **********************/
+// NOTE: this is super unsafe but that's fine for now
 app.post("/sql", function (request, response, next) {
     console.log("Hit SQL POST endpoint");
     query.runQuery(request, response, next, conString);
@@ -44,10 +46,7 @@ app.delete("/sql/:id", function (request, response, next) {
 /********************* SQL **********************/
 
 /****************** LOGIN ******************************/
-app.post("/login", function (request, response, next) {
-    console.log("Hit login POST endpoint");
-    login.addUser(request, response, next, conString);
-});
+app.post("/login", login.addUser);
 /****************** LOGIN ******************************/
 
 /****************** LOCATIONS ******************************/
@@ -68,15 +67,10 @@ app.delete("/locations/:id", function (request, response, next) {
 /****************** LOCATIONS ******************************/
 
 /****************** BOW ******************************/
-app.get("/bow", function (request, response, next) {
-    console.log("hit bow GET endpoint");
-    return bow.getWorks(request, response, next, conString);
-});
+app.get("/bow", bow.getWorks);
 
-app.delete("/bow/:id", function (request, response, next) {
-    console.log("hit bow DELETE endpoint");
-    return bow.deleteWork(request, response, next, conString);
-});
+app.delete("/bow/:id", bow.deleteById);
+app.delete("/bow", bow.deleteByName);
 
 app.post("/bow", function (request, response, next) {
     console.log("hit bow POST endpoint");
@@ -85,37 +79,17 @@ app.post("/bow", function (request, response, next) {
 /****************** BOW ******************************/
 
 /****************** TOPICS ******************************/
-app.get("/topics", function (request, response, next) {
-    console.log("hit topics GET endpoint");
-    return topics.getTopics(request, response, next, conString);
-});
-
-app.delete("/topics/:id", function (request, response, next) {
-    console.log("hit topics DELETE endpoint");
-    return topics.deleteTopic(request, response, next, conString);
-});
-
-app.post("/topics", function (request, response, next) {
-    console.log("hit topics POST endpoint");
-    return topics.addTopic(request, response, next, conString);
-});
+app.get("/topics", topics.getTopics);
+app.delete("/topics/:id", topics.deleteTopic);
+app.delete("/topics", topics.deleteTopicByName);
+app.post("/topics", topics.addTopic);
 /****************** TOPICS ******************************/
 
 /****************** REFS ******************************/
-app.post("/refs", function (request, response, next) {
-    console.log("hit refs POST endpoint");
-    refs.addRef(request, response, next, conString);
-});
-
-app.get("/refs", function (request, response, next) {
-    console.log("hit refs GET endpoint");
-    refs.getRefs(request, response, next, conString);
-});
-
-app.delete("/refs/:id", function (request, response, next) {
-    console.log("hit refs GET endpoint");
-    refs.deleteRef(request, response, next, conString);
-});
+app.post("/refs", refs.addRef);
+app.get("/refs", refs.getRefs);
+app.delete("/refs/:id", refs.deleteById);
+app.delete("/refs", refs.deleteByName);
 /****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/
@@ -135,7 +109,16 @@ app.delete("/sections/:id", function(request, response, next) {
 });
 /****************** SECTIONS ******************************/
 
-app.listen(port, () => {
-    console.log(`running on http://localhost:${port}`);
-});
+// if(process.env.NODE_ENV !== "unit-test") {
+// do not run database setup when unit testing
+// console.log(`[${process.env.NODE_ENV}] Running database setup...`);
+// await dbCommon.createTables();
+// }
 
+if(process.env.NODE_ENV !== "unit-test") {
+    app.listen(port, () => {
+        console.log(`running on http://localhost:${port}`);
+    });
+}
+
+module.exports = app;

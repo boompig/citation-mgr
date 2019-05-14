@@ -1,68 +1,106 @@
-var cruft = require("./pg_cruft.js");
+const dbCommon = require("./db-common");
+const Topic = dbCommon.Topic;
 
 /*
  * conString is the postgres connection string
  */
-exports.getTopics = function (request, response, next, conString) {
-    "use strict";
-    var query, data;
-    if (request.query.username) {
-        query = "SELECT * FROM topics WHERE username=$1";
-        data = [request.query.username];
-        console.log("Fetching all topics for user %s", request.query.username);
+exports.getTopics = async (req, res) => {
+    let topics = [];
+    if (req.query.username) {
+        topics = await Topic.where({username: req.query.username}).fetchAll();
     } else {
-        query = "SELECT * FROM topics";
-        data = [];
+        topics = await Topic.fetchAll();
     }
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Wrote %d rows out", result.rows.length);
-            response.send(result.rows);
-        }
-    });
+    return res.json(topics).end();
 };
 
-exports.deleteTopic = function (request, response, next, conString) {
-    "use strict";
+// TODO: add some security here
+exports.deleteTopicByName = async (req, res) => {
+    // make sure the name is provided
+    if (!req.query.name) {
+        return res.status(400).json({
+            status: "error",
+            msg: "No topic name provided"
+        });
+    }
+    console.log(`Deleting topic with name ${req.query.name}`);
+    const topic = await Topic.where({name: req.query.name}).fetch();
+    if (topic) {
+        await topic.destroy();
+        return res.json({
+            status: "success",
+            msg: "deleted topic"
+        });
+    } else {
+        console.error(`No topic with name ${req.query.name}`);
+        return res.status(404).json({
+            status: "error",
+            msg: `No topic with name ${req.query.name}`
+        });
+    }
+};
+
+exports.deleteTopic = async (req, res) => {
     // make sure the id is provided
-    if (! request.params.id) {
-        response.send({status: "error", msg: "No topic id provided"});
-        return console.error("Topic ID not provided in request");
+    if (!req.params.id) {
+        return res.status(400).json({
+            status: "error", msg: "No topic id provided"});
     }
-
-    var query = "DELETE FROM topics WHERE id=$1";
-    var data = [request.params.id];
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Deleted %d rows", result.rowCount);
-            response.send({ status: "success" });
-        }
-    });
+    console.log(`Deleting topic with ID ${req.params.id}`);
+    try {
+        const topic = await Topic.where({id: req.params.id}).fetch();
+        await topic.destroy();
+        return res.json({
+            status: "success",
+            msg: "deleted topic"
+        });
+    } catch(e) {
+        console.error(e);
+        return res.status(404).json({
+            status: "error",
+            msg: `No topic with ID ${req.params.id}`
+        });
+    }
 };
 
-exports.addTopic = function(request, response, next, conString) {
-    "use strict";
+/**
+ * Required parameters:
+ * 		- name
+ * 		- username
+ *
+ * Optional parameters:
+ * 		- description
+ */
+exports.addTopic = async (req, res) => {
     // name must be specified for topic
-    if (!request.body.name) {
-        response.send({status: "error", msg: "Empty topic name provided"});
-        return console.error("Empty topic name");
-    } else if (!request.body.username) {
-        response.send({status: "error", msg: "username for topic not provided"});
-        return console.error("username for topic not provided");
+    if (!req.body.name) {
+        return res.status(400).json({
+            status: "error", msg: "Empty topic name provided"
+        });
+    } else if (!req.body.username) {
+        return res.status(400).json({
+            status: "error", msg: "username for topic not provided"
+        });
     }
-
-    var query = "INSERT INTO topics (name, description, username) VALUES ($1, $2, $3) RETURNING id";
-    var data = [request.body.name, request.body.description, request.body.username];
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Inserted with ID", result.rows[0].id);
-            response.send({ status: "success", "insert_id": result.rows[0].id });
-        }
+    const topic = new Topic({
+        name: req.body.name,
+        username: req.body.username,
+        description: req.body.description,
     });
+    try {
+        await topic.save();
+
+        const topicID = topic.get("id");
+
+        return res.json({
+            status: "success",
+            insert_id: topicID
+        });
+    } catch(e) {
+        console.error(`Failed to add topic with duplicate name ${req.body.name}`);
+        return res.status(500).json({
+            status: "error",
+            msg: `Failed to add topic with duplicate name ${req.body.name}`
+        });
+    }
 };

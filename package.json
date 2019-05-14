@@ -4,17 +4,27 @@
     "private": true,
     "version": "0.0.1",
     "dependencies": {
-        "express": "4.16.x",
         "body-parser": "1.18.x",
+        "bookshelf": "^0.14.2",
         "bower": "1.8.x",
+        "express": "4.16.x",
+        "jest": "^24.8.0",
+        "knex": "^0.16.5",
+        "morgan": "^1.9.1",
         "pg": "7.4.x"
     },
     "scripts": {
         "postinstall": "bower install",
-        "lint": "eslint server.js node-controllers/*.js",
+        "lint": "eslint server.js node-controllers/*.js test/*.js",
+        "test": "jest --forceExit",
         "start": "node server.js"
     },
     "engines": {
         "node": "0.10.x"
+    },
+    "devDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-plugin-jest": "^22.5.1",
+        "supertest": "^4.0.2"
     }
 }

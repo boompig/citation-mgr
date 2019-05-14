@@ -22,7 +22,7 @@ exports.addLocation = function(request, response, next, conString) {
 
 exports.getLocations = function (request, response, next, conString) {
     "use strict";
-    var query, data;
+    let query, data;
     if (request.query.username) {
         console.log("Fetching all locations for user %s", request.query.username);
         query = "SELECT * FROM locations WHERE username=$1";
@@ -42,15 +42,14 @@ exports.getLocations = function (request, response, next, conString) {
 };
 
 exports.deleteLocation = function (request, response, next, conString) {
-    "use strict";
     // make sure the id is provided
     if (! request.params.id) {
         response.send({status: "error", msg: "No location id provided"});
         return console.error("Location ID not provided in request");
     }
 
-    var query = "DELETE FROM locations WHERE id=$1";
-    var data = [request.params.id];
+    const query = "DELETE FROM locations WHERE id=$1";
+    const data = [request.params.id];
     cruft.query(query, data, conString, function (err, result) {
         if (err) {
             return response.send({ status: "error", msg: err.toString() });
