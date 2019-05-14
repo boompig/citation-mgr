@@ -10,6 +10,19 @@ The idea behind this is that it is a simple interface to your Postgres database,
 This takes care of the CRUD (Create, Read, Update, Delete) queries, making using it for managing citations clean and simple.
 For complicated queries, drop down to postgres and write your own SQL.
 
+## Organization
+
+### Backend
+
+The backend code is written in node.js and the main file is `server.js`.
+The rest of the code can be found in `node-controllers` directory.
+The database is assumed to be postgres, and most of the database schema and connection logic can be found in `node-controllers/db-common.js`.
+
+### Frontend
+
+The frontend is written using Angular (1). Routing on the frontend is done using angular routing and can be found in `public/js/app.js`.
+The rest of the frontend code can be found in `public/js/angular-controllers`
+
 ## Run Locally
 
 ### Create local database fixtures
