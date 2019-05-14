@@ -74,11 +74,13 @@ exports.deleteTopic = async (req, res) => {
 exports.addTopic = async (req, res) => {
     // name must be specified for topic
     if (!req.body.name) {
-        return res.status(400).send({
-            status: "error", msg: "Empty topic name provided"});
+        return res.status(400).json({
+            status: "error", msg: "Empty topic name provided"
+        });
     } else if (!req.body.username) {
-        return res.status(400).send({
-            status: "error", msg: "username for topic not provided"});
+        return res.status(400).json({
+            status: "error", msg: "username for topic not provided"
+        });
     }
     const topic = new Topic({
         name: req.body.name,

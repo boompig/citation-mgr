@@ -15,7 +15,7 @@
     },
     "scripts": {
         "postinstall": "bower install",
-        "lint": "eslint server.js node-controllers/*.js",
+        "lint": "eslint server.js node-controllers/*.js test/*.js",
         "test": "jest --forceExit",
         "start": "node server.js"
     },

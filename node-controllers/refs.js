@@ -16,12 +16,12 @@ const BodyOfWork = dbCommon.BodyOfWork;
 exports.addRef = async (req, res) => {
     // name must be specified for ref
     if (!req.body.name) {
-        return res.json({
+        return res.status(400).json({
             status: "error",
             msg: "Empty ref name provided"
         });
     } else if (!req.body.username) {
-        return res.send({
+        return res.status(400).json({
             status: "error",
             msg: "username for ref not provided"
         });
@@ -95,7 +95,7 @@ exports.deleteByName = async (req, res) => {
             await ref.destroy();
         }
         // console.log(`Deleted ${numDeleted} references`);
-        return res.send({
+        return res.json({
             status: "success",
             num_deleted: numDeleted
         });
@@ -118,7 +118,7 @@ exports.deleteById = async (req, res) => {
     const ref = await Reference.where({ id: req.params.id}).fetch();
     if(ref) {
         await ref.destroy();
-        return res.send({
+        return res.json({
             status: "success"
         });
     } else {
