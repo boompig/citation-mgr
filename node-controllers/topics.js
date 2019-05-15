@@ -31,7 +31,6 @@ router.delete("/:id", authRouter.authOrFail, async (req, res) => {
         return res.status(400).json({
             status: "error", msg: "No topic id provided"});
     }
-    console.log(`Deleting topic with ID ${req.params.id}`);
     try {
         const topic = await Topic.where({id: req.params.id}).fetch();
         await topic.destroy();
@@ -88,31 +87,3 @@ router.post("/", authRouter.authOrFail, async (req, res) => {
 });
 
 module.exports = router;
-
-/**
-// TODO: add some security here
-exports.deleteTopicByName = async (req, res) => {
-    // make sure the name is provided
-    if (!req.query.name) {
-        return res.status(400).json({
-            status: "error",
-            msg: "No topic name provided"
-        });
-    }
-    console.log(`Deleting topic with name ${req.query.name}`);
-    const topic = await Topic.where({name: req.query.name}).fetch();
-    if (topic) {
-        await topic.destroy();
-        return res.json({
-            status: "success",
-            msg: "deleted topic"
-        });
-    } else {
-        console.error(`No topic with name ${req.query.name}`);
-        return res.status(404).json({
-            status: "error",
-            msg: `No topic with name ${req.query.name}`
-        });
-    }
-};
-*/

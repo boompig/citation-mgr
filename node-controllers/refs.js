@@ -41,14 +41,11 @@ router.post("/", myPassport.authOrFail,
                     name: req.body.body_of_work,
                     user: user.get("id"),
                 });
-                console.log(`Creating new BoW with name ${req.body.body_of_work}...`);
                 await bow.save();
                 bowID = bow.get("id");
-                console.log(`BoW ID is ${bowID}`);
                 createdBow = true;
             } else {
                 bowID = bow.get("id");
-                console.log(`BoW already exists and has ID ${bowID}`);
             }
         }
 
