@@ -27,7 +27,7 @@ angular.module("citationControllers")
 
                 if (response.status === "success") {
                     // do not remove until success is returned
-                    let i = $scope.topicList.indexOf(topicItem);
+                    const i = $scope.topicList.indexOf(topicItem);
                     if (i >= 0) {
                         $scope.topicList.splice(i, 1);
                     }

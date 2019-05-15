@@ -27,21 +27,21 @@ angular.module("citationControllers")
         $scope.removeSection = function(sectionItem) {
             console.log("removing section");
             console.log(sectionItem);
-            $http.delete("/sections/" + sectionItem.id).success(function(response, statusCode) {
+            $http.delete("/sections/" + sectionItem.id).success(function() {
                 console.log("successfully deleted section");
                 // remove item from list on success
-                var i = $scope.sectionList.indexOf(sectionItem);
+                const i = $scope.sectionList.indexOf(sectionItem);
                 if (i >= 0) {
                     $scope.sectionList.splice(i, 1);
                 }
             });
         };
 
-        $scope.submitSection = function(e) {
+        $scope.submitSection = function() {
             console.log("submitting section");
             console.log($scope.sectionData);
 
-            $http.post("/sections", $scope.sectionData).success(function(response, statusCode) {
+            $http.post("/sections", $scope.sectionData).success(function(response) {
                 console.log("result:");
                 console.log(response);
                 if (response.status === "success") {
@@ -72,7 +72,7 @@ angular.module("citationControllers")
         };
 
         $scope.getSectionList = function() {
-            $http.get("/sections").success(function(response, statusCode) {
+            $http.get("/sections").success(function(response) {
                 console.log("sections:");
                 console.log(response);
                 $scope.sectionList = response;

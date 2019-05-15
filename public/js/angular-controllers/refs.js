@@ -71,7 +71,7 @@ angular.module("citationControllers")
 
                 if (response.status === "success") {
                     // remove from refList on success
-                    let i = $scope.refList.indexOf(refItem);
+                    const i = $scope.refList.indexOf(refItem);
                     if (i >= 0) {
                         $scope.refList.splice(i, 1);
                     }
@@ -97,6 +97,7 @@ angular.module("citationControllers")
 
         $scope.getTopicList();
         $scope.getRefList();
+
         /**
          * See https://github.com/github/fetch/issues/256
          */
@@ -130,4 +131,4 @@ angular.module("citationControllers")
         };
 
         $scope.getProfile();
-}]);
+    }]);

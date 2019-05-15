@@ -34,7 +34,7 @@ angular.module("citationControllers")
                 console.log("response:");
                 console.log(response);
                 if (response.status === "success") {
-                    var i = $scope.pastQueries.indexOf(queryItem);
+                    const i = $scope.pastQueries.indexOf(queryItem);
                     if (i >= 0) {
                         $scope.pastQueries.splice(i, 1);
                     }
