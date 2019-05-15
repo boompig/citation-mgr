@@ -71,6 +71,18 @@ const Section = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
+const projectsTable = "projects";
+const Project = bookshelf.Model.extend({
+    tableName: projectsTable,
+    hasTimestamps: true,
+});
+
+const quotesTable = "quotes";
+const Quote = bookshelf.Model.extend({
+    tableName: quotesTable,
+    hasTimestamps: true,
+});
+
 const createTables = async () => {
     // create tables here
     await createTableIfNotExists(usersTable, (table) => {
@@ -145,6 +157,32 @@ const createTables = async () => {
             .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
     });
+
+    await createTableIfNotExists(projectsTable, (table) => {
+        table.increments();
+        table.string("name").notNullable();
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
+
+    await createTableIfNotExists(quotesTable, (table) => {
+        table.increments();
+        table.string("link");
+        table.string("authors");
+        table.date("source_pub_date");
+        table.string("publication_name");
+        table.string("source_title");
+        table.string("quote").notNullable();
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
+        table.integer("project")
+            .notNullable()
+            .references("id").inTable(projectsTable).onDelete("cascade");
+        table.timestamps();
+    });
 };
 
 // exports
@@ -157,5 +195,7 @@ module.exports = {
     Topic: Topic,
     Section: Section,
     Location: Location,
+    Project: Project,
+    Quote: Quote,
     createTables: createTables
 };

@@ -40,6 +40,7 @@ const sqlRouter = require("./node-controllers/sql-router");
 const bowRouter = require("./node-controllers/bow");
 const profileRouter = require("./node-controllers/profile");
 const locationRouter = require("./node-controllers/location-router");
+const projectRouter = require("./node-controllers/projects");
 
 /****************** ROUTERS ************************************/
 app.use("/sql", sqlRouter);
@@ -50,6 +51,7 @@ app.use("/topics", topicRouter);
 app.use("/refs", refsRouter);
 app.use("/locations", locationRouter);
 app.use("/sections", sectionRouter);
+app.use("/projects", projectRouter);
 /****************** ROUTERS ******************************/
 
 /****************** VIEWS *********************************/
@@ -59,6 +61,10 @@ app.get("/login", (req, res) => {
     } else {
         res.sendFile(__dirname + "/views/login.html");
     }
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/views/projects-main.html");
 });
 /****************** VIEWS *********************************/
 
