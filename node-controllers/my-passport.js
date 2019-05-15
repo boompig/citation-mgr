@@ -6,7 +6,7 @@ exports.authOrRedirect = (req, res, next) => {
     }
 };
 
-exports.authOrFail = (req, res, next) => {
+exports.authOrFail = async (req, res, next) => {
     if(!req.session) {
         console.error("Session variable not available");
         return res.status(500).json({

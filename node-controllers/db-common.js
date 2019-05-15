@@ -38,7 +38,7 @@ const createTableIfNotExists = async (tableName, createTableFn) => {
 const usersTable = "users";
 const User = bookshelf.Model.extend({
     tableName: usersTable,
-    hasTimestamps: true
+    hasTimestamps: true,
 });
 
 const bowTable = "bodies_of_work";
