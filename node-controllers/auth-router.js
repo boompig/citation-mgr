@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authBackend = require("./auth-backend");
-// const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator/check");
 
 const router = Router();
 
@@ -16,17 +16,16 @@ const router = Router();
  *  - name: string          the name of the user
  */
 router.post("/login",
+    [
+        check("email").exists(),
+        check("password").exists(),
+    ],
     async (req, res) => {
-        // TODO: move parameter validation to middleware
-        if (!req.body.email) {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
             return res.status(400).json({
                 status: "error",
-                msg: "email parameter is required but not specified"
-            }).end();
-        } else if(!req.body.password) {
-            return res.status(400).json({
-                status: "error",
-                msg: "password parameter is required but not specified"
+                errors: errors.array()
             }).end();
         }
 
@@ -73,32 +72,42 @@ router.post("/login",
  *  - is_admin: bool
  *  - name: string          name of the user
  */
-router.post("/register", async (req, res) => {
-    const requiredParams = ["email", "password", "name"];
-    for(const param of requiredParams) {
-        if(!req.body.hasOwnProperty(param)) {
+router.post("/register",
+    [
+        check("email").exists(),
+        check("password").exists(),
+        check("name").exists(),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
             return res.status(400).json({
                 status: "error",
-                msg: `${param} parameter is required but not specified`
+                errors: errors.array()
+            }).end();
+        }
+
+        const user = await authBackend.createUser(req.body.email, req.body.password, req.body.name);
+        if(user) {
+            return res.json({
+                status: "success",
+                is_admin: user.get("is_admin"),
+                name: user.get("name"),
+            });
+        } else {
+            const errorMsg = `User with email ${req.body.email} already exists`;
+            console.warn(errorMsg);
+            return res.status(401).json({
+                status: "error",
+                msg: errorMsg,
             }).end();
         }
     }
+);
 
-    const user = await authBackend.createUser(req.body.email, req.body.password, req.body.name);
-    if(user) {
-        return res.json({
-            status: "success",
-            is_admin: user.get("is_admin"),
-            name: user.get("name"),
-        });
-    } else {
-        const errorMsg = `User with email ${req.body.email} already exists`;
-        console.warn(errorMsg);
-        return res.status(401).json({
-            status: "error",
-            msg: errorMsg,
-        }).end();
-    }
+router.get("/logout", async (req, res) => {
+    await req.session.destroy();
+    res.redirect("/login");
 });
 
 module.exports = router;

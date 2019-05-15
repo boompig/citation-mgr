@@ -45,7 +45,7 @@ html, body {
 .quote-container {
 	/* has to be same as the sidebar width */
 	margin-left: 20%;
-	margin-top: 2rem;
+	margin-top: 3rem;
 	text-align: center;
 }
 
@@ -81,11 +81,17 @@ html, body {
 }
 
 .add-quote-btn {
-	top: 0;
+	top: .6rem;
 	right: 2rem;
 	position: fixed;
 	font-size: 4rem;
 	font-weight: bold;
 	color: green;
 	cursor: pointer;
+}
+
+.logout-btn {
+	top: 0;
+	right: .5rem;
+	position: fixed;
 }

@@ -19,7 +19,6 @@ router.delete("/:id", myPassport.authOrFail, async (req, res) => {
             status: "error", msg: "No BoW id provided"
         });
     }
-    // console.log(`Deleting BoW with ID ${req.params.id}`);
     const bow = await BodyOfWork.where({id: req.params.id}).fetch();
     if(bow) {
         await bow.destroy();
