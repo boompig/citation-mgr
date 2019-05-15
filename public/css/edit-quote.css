@@ -1,4 +1,4 @@
-form label:not(:first-of-type) {
+form label:not(:first-of-type), .form-row {
 	margin-top: 1rem;
 }
 

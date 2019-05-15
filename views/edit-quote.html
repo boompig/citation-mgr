@@ -30,25 +30,36 @@
 				placeholder="link"
 				v-model="quote.link">
 
-			<label for="publication_name">Publication Name</label>
-			<input type="text" name="publication_name" class="form-control"
-				placeholder="Publication Name"
-				v-model="quote.publication_name">
+			<div class="form-row">
+				<div class="form-group col-lg-6">
+					<label for="publication_name">Publication Name</label>
+					<input type="text" name="publication_name" class="form-control"
+						placeholder="Publication Name"
+						v-model="quote.publication_name">
+				</div>
+				<div class="form-group col-lg-6">
+					<label for="source_title">Source Title</label>
+					<input type="text" name="source_title" class="form-control"
+						placeholder="Source Title"
+						v-model="quote.source_title">
+				</div>
+			</div>
 
-			<label for="source_title">Source Title</label>
-			<input type="text" name="source_title" class="form-control"
-				placeholder="Source Title"
-				v-model="quote.source_title">
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="authors">Authors</label>
+					<input type="text" name="authors" class="form-control"
+						placeholder="Authors"
+						v-model="quote.authors">
+				</div>
 
-			<label for="authors">Authors</label>
-			<input type="text" name="authors" class="form-control"
-				placeholder="Authors"
-				v-model="quote.authors">
-
-			<label for="source_pub_date">Publication Date</label>
-			<input type="date" name="source_pub_date" class="form-control"
-				placeholder="Publication Date"
-				v-model="quote.source_pub_date">
+				<div class="form-group col-md-6">
+					<label for="source_pub_date">Publication Date</label>
+					<input type="date" name="source_pub_date" class="form-control"
+						placeholder="Publication Date"
+						v-model="quote.source_pub_date">
+				</div>
+			</div>
 
 			<button class="btn btn-primary form-control" type="submit">
 				{{ isNew ? "Create" : "Update" }}
