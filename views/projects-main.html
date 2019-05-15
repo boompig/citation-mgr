@@ -12,7 +12,9 @@
 <body>
 	<div class="container" id="projects-main-app">
 		<div class="project-sidebar">
-			<h2 class="title">Projects</h2>
+			<h2 class="title">Projects
+				<a class="add-project-btn" href="/projects/new">&plus;</a>
+			</h2>
 			<div v-if="isProjectsLoaded">
 				<div class="project" v-for="project in projects"
 					v-bind:class="{active: project.id === activeProject.id}"
@@ -64,6 +66,8 @@
 			<div v-if="!activeProject">
 				Select a project to load quotes
 			</div>
+
+			<a class="add-quote-btn" href="/quotes/new">&plus;</a>
 		</div>
 	</div>
 

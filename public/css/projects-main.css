@@ -79,3 +79,13 @@ html, body {
 	text-align: right;
 	display: block;
 }
+
+.add-quote-btn {
+	top: 0;
+	right: 2rem;
+	position: fixed;
+	font-size: 4rem;
+	font-weight: bold;
+	color: green;
+	cursor: pointer;
+}
