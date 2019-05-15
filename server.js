@@ -36,31 +36,17 @@ const sections = require("./node-controllers/sections");
 const refsRouter = require("./node-controllers/refs");
 const locations = require("./node-controllers/locations");
 const authRouter = require("./node-controllers/auth-router");
-const query = require("./node-controllers/query");
+const sqlRouter = require("./node-controllers/sql-router");
 const bowRouter = require("./node-controllers/bow");
 const profileRouter = require("./node-controllers/profile");
 
-/********************* SQL **********************/
-// NOTE: this is super unsafe but that's fine for now
-app.post("/sql", function (request, response, next) {
-    console.log("Hit SQL POST endpoint");
-    query.runQuery(request, response, next, conString);
-});
-
-app.get("/sql", function (request, response, next) {
-    console.log("Hit SQL GET endpoint");
-    query.getQueries(request, response, next, conString);
-});
-
-app.delete("/sql/:id", function (request, response, next) {
-    console.log("Hit SQL DELETE endpoint");
-    query.deleteQuery(request, response, next, conString);
-});
-/********************* SQL **********************/
-
-/****************** LOGIN ******************************/
+/****************** ROUTERS ************************************/
+app.use("/sql", sqlRouter);
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
+app.use("/bow", bowRouter);
+app.use("/topics", topicRouter);
+app.use("/refs", refsRouter);
 /****************** LOGIN ******************************/
 
 /****************** LOCATIONS ******************************/
@@ -79,18 +65,6 @@ app.delete("/locations/:id", function (request, response, next) {
     return locations.deleteLocation(request, response, next, conString);
 });
 /****************** LOCATIONS ******************************/
-
-/****************** BOW ******************************/
-app.use("/bow", bowRouter);
-/****************** BOW ******************************/
-
-/****************** TOPICS ******************************/
-app.use("/topics", topicRouter);
-/****************** TOPICS ******************************/
-
-/****************** REFS ******************************/
-app.use("/refs", refsRouter);
-/****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/
 app.post("/sections/", function(request, response, next) {

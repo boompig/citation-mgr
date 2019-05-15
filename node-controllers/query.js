@@ -1,6 +1,6 @@
 const cruft = require("./pg_cruft.js");
 
-exports.deleteQuery = function (request, response, next, conString) {
+exports.deleteQuery = function (request, response, conString) {
     // make sure the id is provided
     if (! request.params.id) {
         response.send({status: "error", msg: "No topic id provided"});
@@ -18,7 +18,7 @@ exports.deleteQuery = function (request, response, next, conString) {
     });
 };
 
-exports.runQuery = function (request, response, next, conString) {
+exports.runQuery = function (request, response, conString) {
     "use strict";
     if (!request.body.sql) {
         console.error("query not provided");
@@ -56,7 +56,7 @@ exports.runQuery = function (request, response, next, conString) {
     });
 };
 
-exports.getQueries = function (request, response, next, conString) {
+exports.getQueries = function (request, response, conString) {
     let query, data;
     if (request.query.username) {
         console.log("Getting queries as " + request.query.username);
