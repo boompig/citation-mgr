@@ -1,1 +1,5 @@
-var app = angular.module("citationControllers", []);
+/* env browser */
+/* global angular */
+/* exported app */
+
+const app = angular.module("citationControllers", []);

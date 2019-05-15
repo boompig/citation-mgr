@@ -40,6 +40,8 @@ const sqlRouter = require("./node-controllers/sql-router");
 const bowRouter = require("./node-controllers/bow");
 const profileRouter = require("./node-controllers/profile");
 const locationRouter = require("./node-controllers/location-router");
+const projectRouter = require("./node-controllers/projects");
+const quoteRouter = require("./node-controllers/quotes");
 
 /****************** ROUTERS ************************************/
 app.use("/sql", sqlRouter);
@@ -50,6 +52,8 @@ app.use("/topics", topicRouter);
 app.use("/refs", refsRouter);
 app.use("/locations", locationRouter);
 app.use("/sections", sectionRouter);
+app.use("/api/projects", projectRouter);
+app.use("/api/quotes", quoteRouter);
 /****************** ROUTERS ******************************/
 
 /****************** VIEWS *********************************/
@@ -59,6 +63,26 @@ app.get("/login", (req, res) => {
     } else {
         res.sendFile(__dirname + "/views/login.html");
     }
+});
+
+app.get("/projects/new", (req, res) => {
+    res.sendFile(__dirname + "/views/edit-project.html");
+});
+
+app.get("/projects/:id", (req, res) => {
+    res.sendFile(__dirname + "/views/edit-project.html");
+});
+
+app.get("/quotes/new", (req, res) => {
+    res.sendFile(__dirname + "/views/edit-quote.html");
+});
+
+app.get("/quotes/:id", (req, res) => {
+    res.sendFile(__dirname + "/views/edit-quote.html");
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/views/projects-main.html");
 });
 /****************** VIEWS *********************************/
 

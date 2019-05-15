@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Citation Manager &middot; Projects</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/projects-main.css">
+</head>
+<body>
+	<div class="container" id="projects-main-app">
+		<div class="project-sidebar">
+			<h2 class="title">Projects
+				<a class="add-project-btn" href="/projects/new">&plus;</a>
+			</h2>
+			<div v-if="isProjectsLoaded">
+				<div class="project" v-for="project in projects"
+					v-bind:class="{active: project.id === activeProject.id}"
+					v-on:click="setActiveProject(project)">
+					<span class="project-name">{{ project.name}}</span>
+					<a class="btn btn-primary btn-sm edit-btn" v-bind:href="getEditProjectUrl(project)">edit</a>
+				</div>
+				<div v-if="projects.length === 0">
+					<p>You don't have any projects. Try <a href="/projects/new">creating one</a></p>
+				</div>
+			</div>
+			<div v-if="!isProjectsLoaded">
+				<p>Loading projects...</p>
+			</div>
+		</div>
+
+		<div class="quote-container">
+			<div v-if="activeProject">
+				<h2 class="title">{{ activeProject.name }}</h2>
+				<div v-if="isQuotesLoaded">
+					<div v-if="quotes.hasOwnProperty(activeProject.id)">
+						<div class="quote" v-for="quote in quotes[activeProject.id]">
+							<div class="quote-metadata">
+								<div class="quote-created-at-date">
+									Added on {{ new Date(quote.created_at).toDateString() }}
+								</div>
+							</div>
+							<div class="quote-text" v-on:click="editQuote(quote)">&quot;{{ quote.quote }}&quot;</div>
+							<div v-if="quote.author">
+								<span>&nbsp;-&nbsp;</span>
+								<div class="quote-author">{{ quote.author }}</div>
+							</div>
+							<a class="quote-link" v-bind:href="quote.link" target="_blank">
+								{{ getQuoteText(quote) }}
+							</a>
+						</div>
+					</div>
+					<div v-if="!quotes.hasOwnProperty(activeProject.id)">
+						<p>
+							You don't have any quotes for this project.
+							Try <a v-bind:href="getAddQuotesUrl()">adding one</a>
+						</p>
+					</div>
+				</div>
+				<div v-if="!isQuotesLoaded">
+					Loading quotes for project {{ activeProject.name }}...
+				</div>
+			</div>
+			<div v-if="!activeProject">
+				Select a project to load quotes
+			</div>
+
+			<a class="add-quote-btn" v-bind:href="getAddQuotesUrl()">&plus;</a>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="/js/utils.js"></script>
+	<script src="/js/vue-controllers/projects-main.js"></script>
+</body>
+</html>

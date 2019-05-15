@@ -14,9 +14,17 @@ describe("createAccount", () => {
         // and make sure the user was in fact created
         expect(user).not.toBeNull();
     });
+
+    afterAll(async () => {
+        await Auth.deleteUserByEmail(EMAIL);
+    });
 });
 
 describe("login", () => {
+    afterAll(async () => {
+        await Auth.deleteUserByEmail(EMAIL);
+    });
+
     test("fail to login with bad credentials", async () => {
         // step 1 - delete the testing user (if present)
         // ignore return value

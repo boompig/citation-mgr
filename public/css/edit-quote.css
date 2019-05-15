@@ -1,0 +1,17 @@
+form label:not(:first-of-type) {
+	margin-top: 1rem;
+}
+
+form label {
+	font-weight: bold;
+}
+
+form button[type="submit"] {
+	margin-top: .9rem;
+}
+
+.title {
+	font-weight: normal;
+	text-align: center;
+	margin-top: .5rem;
+}
