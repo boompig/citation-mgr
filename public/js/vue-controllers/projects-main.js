@@ -28,8 +28,6 @@ const app = new Vue({
             if(res.ok) {
                 this.projects = await res.json();
                 this.isProjectsLoaded = true;
-                // console.log("projects:");
-                // console.log(this.projects);
                 if(this.projects.length > 0) {
                     this.activeProject = this.projects[0];
                 }
@@ -57,8 +55,6 @@ const app = new Vue({
                     this.quotes[quote.project].push(quote);
                 }
                 this.isQuotesLoaded = true;
-                // console.log("quotes:");
-                // console.log(this.quotes);
             } else {
                 console.error(res);
                 const t = await res.text();
@@ -68,10 +64,7 @@ const app = new Vue({
         getQuotesForProject: async function() {
             const res = await getJSON("/api/quotes", {project: this.projects[this.activeProject]});
             if(res.ok) {
-                // const proj = this.projects[this.activeProject];
                 this.quotes[this.activeProject] = await res.json();
-                // console.log(`quotes for project ${proj.name}:`);
-                // console.log(this.quotes[this.activeProject]);
             } else {
                 console.error(res);
                 const t = await res.text();
