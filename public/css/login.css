@@ -1,0 +1,27 @@
+html, body {
+    font-size: 1rem;
+}
+
+.login-container {
+    max-width: 600px;
+    margin: 2rem auto 0 auto;
+    text-align: center;
+}
+
+form.login-form {
+    margin-top: 1rem;
+    text-align: left;
+}
+
+form .subpage-title {
+	font-weight: normal;
+	text-align: center;
+}
+
+form button {
+	margin-top: 1rem;
+}
+
+form .error {
+	color: red;
+}

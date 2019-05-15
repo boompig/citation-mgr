@@ -1,9 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const expressSession = require("express-session");
+const crypto = require("crypto");
+
 const app = express();
 
 // set up logging
-const morgan = require("morgan");
 app.use(morgan("dev"));
 
 const dbCommon = require("./node-controllers/db-common");
@@ -14,18 +17,28 @@ const conString = dbCommon.conString;
 const port = process.env.PORT || 8080;
 
 app.use(express.static(__dirname + "/public"));
+
 app.use(bodyParser.json());
+const ss = crypto.randomBytes(20).toString();
+// TODO: use an express-session middleware that is production-grade
+app.use(expressSession({
+    secure: process.env.NODE_ENV === "production",
+    secret: ss,
+    saveUninitialized: false,
+    resave: false,
+}));
 
 /**
  * One controller for each endpoint
  */
-const topics = require("./node-controllers/topics");
+const topicRouter = require("./node-controllers/topics");
 const sections = require("./node-controllers/sections");
-const refs = require("./node-controllers/refs");
+const refsRouter = require("./node-controllers/refs");
 const locations = require("./node-controllers/locations");
-const login = require("./node-controllers/login");
+const authRouter = require("./node-controllers/auth-router");
 const query = require("./node-controllers/query");
-const bow = require("./node-controllers/bow");
+const bowRouter = require("./node-controllers/bow");
+const profileRouter = require("./node-controllers/profile");
 
 /********************* SQL **********************/
 // NOTE: this is super unsafe but that's fine for now
@@ -46,7 +59,8 @@ app.delete("/sql/:id", function (request, response, next) {
 /********************* SQL **********************/
 
 /****************** LOGIN ******************************/
-app.post("/login", login.addUser);
+app.use("/auth", authRouter);
+app.use("/profile", profileRouter);
 /****************** LOGIN ******************************/
 
 /****************** LOCATIONS ******************************/
@@ -67,29 +81,15 @@ app.delete("/locations/:id", function (request, response, next) {
 /****************** LOCATIONS ******************************/
 
 /****************** BOW ******************************/
-app.get("/bow", bow.getWorks);
-
-app.delete("/bow/:id", bow.deleteById);
-app.delete("/bow", bow.deleteByName);
-
-app.post("/bow", function (request, response, next) {
-    console.log("hit bow POST endpoint");
-    return bow.addWork(request, response, next, conString);
-});
+app.use("/bow", bowRouter);
 /****************** BOW ******************************/
 
 /****************** TOPICS ******************************/
-app.get("/topics", topics.getTopics);
-app.delete("/topics/:id", topics.deleteTopic);
-app.delete("/topics", topics.deleteTopicByName);
-app.post("/topics", topics.addTopic);
+app.use("/topics", topicRouter);
 /****************** TOPICS ******************************/
 
 /****************** REFS ******************************/
-app.post("/refs", refs.addRef);
-app.get("/refs", refs.getRefs);
-app.delete("/refs/:id", refs.deleteById);
-app.delete("/refs", refs.deleteByName);
+app.use("/refs", refsRouter);
 /****************** REFS ******************************/
 
 /****************** SECTIONS ******************************/
@@ -109,16 +109,22 @@ app.delete("/sections/:id", function(request, response, next) {
 });
 /****************** SECTIONS ******************************/
 
-// if(process.env.NODE_ENV !== "unit-test") {
-// do not run database setup when unit testing
-// console.log(`[${process.env.NODE_ENV}] Running database setup...`);
-// await dbCommon.createTables();
-// }
+/****************** VIEWS *********************************/
+app.get("/login", (req, res) => {
+    if(req.session.email) {
+        res.redirect("/");
+    } else {
+        res.sendFile(__dirname + "/views/login.html");
+    }
+});
+/****************** VIEWS *********************************/
 
-if(process.env.NODE_ENV !== "unit-test") {
-    app.listen(port, () => {
-        console.log(`running on http://localhost:${port}`);
-    });
-}
+console.log("Running database setup...");
+dbCommon.createTables().then(() => {
+    console.log("Database setup complete");
+});
+app.listen(port, () => {
+    console.log(`running on http://localhost:${port}`);
+});
 
 module.exports = app;

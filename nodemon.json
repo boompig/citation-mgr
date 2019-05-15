@@ -1,0 +1,7 @@
+{
+    "verbose": true,
+    "watch": [
+        "node-controllers/*.js",
+        "server.js"
+    ]
+}
