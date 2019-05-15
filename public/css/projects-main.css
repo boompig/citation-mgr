@@ -23,7 +23,7 @@ html, body {
 .project-sidebar .project {
 	padding-left: 1rem;
 	cursor: pointer;
-	padding-bottom: .2rem;
+	padding-bottom: .15rem;
 }
 
 .project-sidebar .project .project-name {
@@ -31,7 +31,8 @@ html, body {
 }
 
 .project-sidebar .project.active {
-	background-color: #f4bcd5;
+	background-color: #353535;
+	color: white;
 }
 
 .project-sidebar .project .edit-btn {

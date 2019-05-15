@@ -1,0 +1,13 @@
+.title {
+	font-weight: normal;
+	text-align: center;
+	margin-top: .5rem;
+}
+
+form label {
+	font-weight: bold;
+}
+
+form button[type="submit"] {
+	margin-top: .9rem;
+}
