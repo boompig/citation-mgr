@@ -20,7 +20,9 @@
     },
     "scripts": {
         "postinstall": "bower install",
-        "lint": "eslint server.js node-controllers/*.js test/*.js",
+        "lint": "yarn lint:server & yarn lint:client",
+        "lint:client": "eslint public/js/angular-controllers/*.js",
+        "lint:server": "eslint server.js node-controllers/*.js test/*.js",
         "test": "jest --forceExit --runInBand",
         "start": "node server.js"
     },
