@@ -68,7 +68,7 @@ angular.module("citationControllers")
     };
 
     $scope.getSectionList = function() {
-        $http.get("/sections?username=" + $cookies.loginName).success(function(response, statusCode) {
+        $http.get("/sections").success(function(response, statusCode) {
             console.log("sections:");
             console.log(response);
             $scope.sectionList = response;

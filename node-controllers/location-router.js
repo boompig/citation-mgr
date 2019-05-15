@@ -6,13 +6,11 @@ const { conString } = require("./db-common");
 const router = new Router();
 
 router.get("/", myPassport.authOrFail, async(request, response, next) => {
-    console.log("hit locations GET endpoint");
     return locations.getLocations(request, response, next, conString);
 });
 
-router.post("/", async (request, response, next) => {
-    console.log("hit locations POST endpoint");
-    return locations.addLocation(request, response, next, conString);
+router.post("/", async (request, response) => {
+    return locations.addLocation(request, response);
 });
 
 router.delete("/:id", async (request, response, next) => {

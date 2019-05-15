@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const expressSession = require("express-session");
 const crypto = require("crypto");
+const process = require("process");
 
 const app = express();
 
@@ -18,7 +19,8 @@ const port = process.env.PORT || 8080;
 app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.json());
-const ss = crypto.randomBytes(20).toString();
+// set the secret string to something predictable in development
+const ss = process.env.NODE_ENV === "production" ? crypto.randomBytes(20).toString() : "secret string";
 // TODO: use an express-session middleware that is production-grade
 app.use(expressSession({
     secure: process.env.NODE_ENV === "production",

@@ -59,15 +59,15 @@ const Topic = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
-// const locTable = "locations";
-// const Location = bookshelf.Model.extend({
-//     table: locTable,
-//     hasTimestamps: true,
-// });
+const locTable = "locations";
+const Location = bookshelf.Model.extend({
+    tableName: locTable,
+    hasTimestamps: true,
+});
 
 const sectionsTable = "sections";
 const Section = bookshelf.Model.extend({
-    table: sectionsTable,
+    tableName: sectionsTable,
     hasTimestamps: true,
 });
 
@@ -116,20 +116,33 @@ const createTables = async () => {
 
     await createTableIfNotExists(refsTable, (table) => {
         table.increments();
-
-        // primary characteristics of the table
         table.string("name").notNullable();
         table.string("first_author");
         table.string("author_group");
         table.integer("year");
-        table.integer("body_of_work").references("id").inTable(bowTable)
-            .onDelete("cascade");
+        table.integer("body_of_work")
+            .references("id").inTable(bowTable).onDelete("cascade");
         table.integer("citation_num");
-
         table.integer("user")
             .notNullable()
             .references("id").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
 
+    await createTableIfNotExists(locTable, (table) => {
+        table.increments();
+        table.integer("ref")
+            .references("id").inTable(refsTable).onDelete("cascade");
+        table.integer("section")
+            .references("id").inTable(sectionsTable).onDelete("cascade");
+        table.string("quote").notNullable();
+        table.integer("body_of_work")
+            .references("id").inTable(bowTable).onDelete("cascade");
+        table.integer("topic")
+            .references("id").inTable(topicsTable).onDelete("cascade");
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
     });
 };
@@ -143,6 +156,6 @@ module.exports = {
     BodyOfWork: BodyOfWork,
     Topic: Topic,
     Section: Section,
-    // Location: Location,
+    Location: Location,
     createTables: createTables
 };

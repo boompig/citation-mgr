@@ -1,15 +1,19 @@
 const { Router } = require("express");
 const { BodyOfWork, User } = require("./db-common");
-const authRouter = require("./my-passport");
+const myPassport = require("./my-passport");
 
 const router = new Router();
 
-router.get("/", authRouter.authOrFail, async (req, res) => {
-    const works = await BodyOfWork.fetchAll();
+router.get("/", myPassport.authOrFail, async (req, res) => {
+    const user = await User.where({email: req.session.email}).fetch();
+    let works = await BodyOfWork.where({user: user.get("id")}).fetch();
+    if(!works) {
+        works = [];
+    }
     return res.json(works);
 });
 
-router.delete("/:id", authRouter.authOrFail, async (req, res) => {
+router.delete("/:id", myPassport.authOrFail, async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({
             status: "error", msg: "No BoW id provided"
@@ -30,7 +34,7 @@ router.delete("/:id", authRouter.authOrFail, async (req, res) => {
     }
 });
 
-router.post("/", authRouter.authOrFail, async (req, res) => {
+router.post("/", myPassport.authOrFail, async (req, res) => {
     if(!req.body.name) {
         return res.status(400).json({
             status: "error",

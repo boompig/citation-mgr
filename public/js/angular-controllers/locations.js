@@ -1,3 +1,5 @@
+/* env browser */
+/* global angular, window */
 angular.module("citationControllers")
 .controller("LocationCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", "$modal", function($scope, $route, $routeParams, $location, $http, $cookies, $modal) {
     "use strict";
@@ -74,7 +76,7 @@ angular.module("citationControllers")
     };
 
     $scope.getLocations = function () {
-        $http.get("/locations?username=" + $scope.username).success(function(response){
+        $http.get("/locations").success(function(response){
             console.log("locations:");
             console.log(response);
             $scope.locationList = response;
@@ -82,7 +84,7 @@ angular.module("citationControllers")
     };
 
     $scope.getRefs = function () {
-        $http.get("/refs?username=" + $scope.username).success(function(response){
+        $http.get("/refs").success(function(response){
             console.log("refs:");
             console.log(response);
             $scope.refList = response;
@@ -90,7 +92,7 @@ angular.module("citationControllers")
     };
 
     $scope.getSections = function () {
-        $http.get("/sections?username=" + $scope.username).success(function(response, statusCode){
+        $http.get("/sections").success(function(response, statusCode){
             console.log("sections:");
             console.log(response);
             $scope.sectionList = response;
@@ -106,7 +108,7 @@ angular.module("citationControllers")
     };
 
     $scope.getTopics = function () {
-        $http.get("/topics?username=" + $scope.username).success(function(response, statusCode){
+        $http.get("/topics").success(function(response, statusCode){
             console.log("topics:");
             // response is a list of topic objects in no particular order
             console.log(response);
@@ -120,7 +122,7 @@ angular.module("citationControllers")
     };
 
     $scope.getBodiesOfWork = function () {
-        $http.get("/bow?username=" + $scope.username).success(function(response){
+        $http.get("/bow").success(function(response){
             console.log("bow:");
             // response is a list of topic objects in no particular order
             console.log(response);
