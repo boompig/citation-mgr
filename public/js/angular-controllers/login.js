@@ -1,11 +1,10 @@
 /* global angular, window */
 /* env browser */
 
-const BASE_URL = `${window.location.protocol}//${window.location.host}`;
 
 angular.module("citationControllers")
     .controller("LoginCtrl", ["$scope", "$route", "$routeParams", "$location", "$http", "$cookies", function ($scope, $route, $routeParams, $location, $http, $cookies) {
-        "use strict";
+        const BASE_URL = `${window.location.protocol}//${window.location.host}`;
 
         this.loginName = null;
 
@@ -61,6 +60,7 @@ angular.module("citationControllers")
             const response = await $scope.getJSON("/profile", {});
             if(response.ok) {
                 const contents = await response.json();
+                console.log("profile:");
                 console.log(contents);
                 // redirect to another part of the page
                 $location.path("/refs");
