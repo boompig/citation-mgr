@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Citation Manager &middot; Edit Project</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/edit-project.css">
+</head>
+<body>
+	<div class="container" id="edit-project-app">
+		<h1 class="title">{{ title }}</h1>
+		<form role="form" v-on:submit.prevent="submitProject">
+			<label for="name">Project Name</label>
+			<input type="text" name="name" class="form-control"
+				placeholder="name"
+				required="required"
+				v-model="project.name">
+			<button class="btn btn-primary form-control" type="submit">
+				{{ isNew ? "Create" : "Update" }}
+			</button>
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="/js/utils.js"></script>
+	<script src="/js/vue-controllers/edit-project.js"></script>
+</body>
+</html>

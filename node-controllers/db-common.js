@@ -165,6 +165,8 @@ const createTables = async () => {
             .notNullable()
             .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
+
+        table.unique(["name", "user"]);
     });
 
     await createTableIfNotExists(quotesTable, (table) => {

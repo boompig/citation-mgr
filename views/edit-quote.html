@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Citation Manager &middot; Edit Quote</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/edit-quote.css">
+</head>
+<body>
+	<div class="container" id="edit-quote-app">
+		<h1 class="title">{{ title }}</h1>
+		<form role="form" v-on:submit.prevent="submitForm" method="POST">
+			<label for="name">Quote</label>
+			<input type="text" name="quote" class="form-control"
+				placeholder="quote"
+				required="required"
+				v-model="quote.quote">
+
+			<label for="project">Project</label>
+			<select name="project" class="form-control" required="required"
+				v-model="quote.project">
+				<option v-for="project in projects" v-bind:value="project.id">{{ project.name }}</option>
+			</select>
+
+			<button class="btn btn-primary form-control" type="submit">
+				{{ isNew ? "Create" : "Update" }}
+			</button>
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="/js/utils.js"></script>
+	<script src="/js/vue-controllers/edit-quote.js"></script>
+</body>
+</html>

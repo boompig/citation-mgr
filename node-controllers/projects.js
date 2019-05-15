@@ -4,13 +4,37 @@ const myPassport = require("./my-passport");
 
 const router = new Router();
 
+
+const sendError = (res, code, msg) => {
+    return res.status(code).json({
+        msg: msg,
+        status: "error"
+    });
+};
+
 router.get("/", myPassport.authOrFail, async (req, res) => {
     const user = await User.where({email: req.session.email}).fetch();
-    let works = await Project.where({user: user.get("id")}).fetch();
-    if(!works) {
-        works = [];
+    let projects = await Project.where({user: user.get("id")}).fetchAll();
+    if(!projects) {
+        projects = [];
     }
-    return res.json(works);
+    return res.json(projects);
+});
+
+router.get("/:id", myPassport.authOrFail, async (req, res) => {
+    if(!req.params.id) {
+        return sendError(res, 400, "id URL parameter is required");
+    }
+    const user = await User.where({email: req.session.email}).fetch();
+    const project = await Project.where({
+        user: user.get("id"),
+        id: Number.parseInt(req.params.id),
+    }).fetch();
+    if(project) {
+        return res.json(project);
+    } else {
+        return sendError(res, 404, "Project with this ID either does not exist or does not belong to you");
+    }
 });
 
 router.post("/", myPassport.authOrFail, async (req, res) => {
