@@ -1,61 +1,67 @@
-const cruft = require("./pg_cruft.js");
+const { Location, User } = require("./db-common");
 
-exports.addLocation = function(request, response, next, conString) {
-    if (!request.body.username) {
-        response.send({status: "error", msg: "username for section not provided"});
-        return console.error("username for section not provided");
+exports.addLocation = async (request, response) => {
+    if (!request.body.quote) {
+        return response.send({
+            status: "error",
+            msg: "quote is a required parameter"
+        });
     }
 
-    const query = "INSERT INTO locations (ref, section, quote, ref_quote, body_of_work, topic, username) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
-    const data = [request.body.ref, request.body.section, request.body.quote, request.body.ref_quote, request.body.body_of_work, request.body.topic, request.body.username];
+    const user = await User.where({email: request.session.email}).fetch();
 
-    cruft.query(query, data, conString, function(err, result) {
-        if (err) {
-            console.error("Query error: %s", err);
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Inserted with ID", result.rows[0].id);
-            return response.send({ status: "success", "insert_id": result.rows[0].id });
-        }
+    const loc = new Location({
+        ref: request.body.ref,
+        section: request.body.section,
+        quote: request.body.quote,
+        body_of_work: request.body.body_of_work,
+        topic: request.body.topic,
+        user: user.get("id"),
+    });
+
+    await loc.save();
+
+    return response.json({
+        status: "success",
+        insert_id: loc.get("id"),
     });
 };
 
-exports.getLocations = function (request, response, next, conString) {
-    "use strict";
-    let query, data;
-    if (request.query.username) {
-        console.log("Fetching all locations for user %s", request.query.username);
-        query = "SELECT * FROM locations WHERE username=$1";
-        data = [request.query.username];
-    } else {
-        query = "SELECT * FROM locations";
-        data = [];
+exports.getLocations = async (request, response) => {
+    const user = await User.where({email: request.session.email}).fetch();
+    let locs = await Location.where({user: user.get("id")}).fetchAll();
+    if(!locs) {
+        locs = [];
     }
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Wrote %d rows out", result.rows.length);
-            response.send(result.rows);
-        }
-    });
+    return response.json(locs);
 };
 
-exports.deleteLocation = function (request, response, next, conString) {
+exports.deleteLocation = async (request, response) => {
     // make sure the id is provided
-    if (! request.params.id) {
-        response.send({status: "error", msg: "No location id provided"});
-        return console.error("Location ID not provided in request");
+    if (!request.params.id) {
+        return response.status(400)
+            .json({
+                status: "error",
+                msg: "No location id provided"
+            });
     }
 
-    const query = "DELETE FROM locations WHERE id=$1";
-    const data = [request.params.id];
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
+    const user = await User.where({email: request.session.email}).fetch();
+    const loc = await Location.where({id: request.params.id}).fetch();
+    if(loc) {
+        if(loc.get("user") === user.get("id")) {
+            await loc.destroy();
+            return response.json({status: "success"});
         } else {
-            console.log("Deleted %d rows", result.rowCount);
-            response.send({ status: "success" });
+            return response.status(403).json({
+                status: "error",
+                msg: "location does not belong to you"
+            });
         }
-    });
+    } else {
+        return response.status(404).json({
+            status: "error",
+            msg: "location not found"
+        });
+    }
 };

@@ -74,7 +74,7 @@ angular.module("citationControllers")
     };
 
     $scope.getRefList = function() {
-        $http.get("/refs?username=" + $cookies.loginName).success(function(response) {
+        $http.get("/refs").success(function(response) {
             console.log("refs:");
             console.log(response);
             $scope.refList = response;
@@ -84,7 +84,7 @@ angular.module("citationControllers")
     $scope.getTopicList = function() {
         var that = this;
 
-        $http.get("/topics?username=" + $cookies.loginName).success(function (response, statusCode) {
+        $http.get("/topics").success(function (response, statusCode) {
             console.log("got topics:");
             console.log(response);
             $scope.topicList = response;

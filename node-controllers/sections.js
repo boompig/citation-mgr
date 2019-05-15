@@ -1,28 +1,16 @@
 const cruft = require("./pg_cruft.js");
+const { Section, User } = require("./db-common");
 
 /*
  * conString is the postgres connection string
  */
-exports.getSections = function (request, response, next, conString) {
-    "use strict";
-    let query, data;
-    if (request.query.username) {
-        query = "SELECT * FROM sections WHERE username=$1";
-        data = [request.query.username];
-        console.log("Fetching all sections for user %s", request.query.username);
-    } else {
-        query = "SELECT * FROM sections";
-        data = [];
+exports.getSections = async (request, response) => {
+    const user = await User.where({email: request.session.email}).fetch();
+    let sections = await Section.where({user: user.get("id")}).fetch();
+    if(!sections) {
+        sections = [];
     }
-
-    cruft.query(query, data, conString, function (err, result) {
-        if (err) {
-            return response.send({ status: "error", msg: err.toString() });
-        } else {
-            console.log("Wrote %d rows out", result.rows.length);
-            response.send(result.rows);
-        }
-    });
+    return response.json(sections);
 };
 
 exports.deleteSection = function (request, response, next, conString) {

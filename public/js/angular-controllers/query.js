@@ -76,7 +76,7 @@ angular.module("citationControllers")
 
     $scope.getPastQueries = function () {
         console.log("Fetching past queries...");
-        $http.get("/sql?username=" + $cookies.loginName).success(function (response) {
+        $http.get("/sql").success(function (response) {
             console.log("Got past queries");
             console.log(response);
             if (response.status !== "error") {

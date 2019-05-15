@@ -59,7 +59,7 @@ angular.module("citationControllers")
     $scope.fetchTopicList = function() {
         var that = this;
 
-        $http.get("/topics?username=" + $cookies.loginName).success(function (response, statusCode) {
+        $http.get("/topics").success(function (response, statusCode) {
             console.log("got topics:");
             console.log(response);
             $scope.topicList = response;

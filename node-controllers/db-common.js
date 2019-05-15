@@ -38,7 +38,7 @@ const createTableIfNotExists = async (tableName, createTableFn) => {
 const usersTable = "users";
 const User = bookshelf.Model.extend({
     tableName: usersTable,
-    hasTimestamps: true
+    hasTimestamps: true,
 });
 
 const bowTable = "bodies_of_work";
@@ -59,12 +59,26 @@ const Topic = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
+const locTable = "locations";
+const Location = bookshelf.Model.extend({
+    tableName: locTable,
+    hasTimestamps: true,
+});
+
+const sectionsTable = "sections";
+const Section = bookshelf.Model.extend({
+    tableName: sectionsTable,
+    hasTimestamps: true,
+});
+
 const createTables = async () => {
     // create tables here
     await createTableIfNotExists(usersTable, (table) => {
         table.increments();
-        table.string("name").unique().notNullable();
-        table.boolean("is_admin").notNullable.defaultTo(false);
+        table.string("name").notNullable();
+        table.string("email").unique().notNullable();
+        table.string("hashed_password").notNullable();
+        table.boolean("is_admin").notNullable().defaultTo(false);
         table.timestamps();
     });
 
@@ -72,35 +86,63 @@ const createTables = async () => {
         table.increments();
         table.string("name").unique().notNullable();
         table.string("description");
-
-        table.string("username")
+        table.integer("user")
             .notNullable()
-            .references("name").inTable(usersTable).onDelete("cascade");
+            .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
     });
 
     await createTableIfNotExists(bowTable, (table) => {
         table.increments();
-        table.string("name").unique().notNullable();
+        table.string("name").notNullable();
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
+
+    await createTableIfNotExists(sectionsTable, (table) => {
+        table.increments();
+        table.string("name").notNullable();
+        table.integer("section_number");
+        table.integer("body_of_work")
+            .notNullable()
+            .references("id").inTable(bowTable).onDelete("cascade");
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
     });
 
     await createTableIfNotExists(refsTable, (table) => {
         table.increments();
-
-        // primary characteristics of the table
         table.string("name").notNullable();
         table.string("first_author");
         table.string("author_group");
         table.integer("year");
-        table.foreign("body_of_work").references("id").inTable(bowTable)
-            .onDelete("cascade");
+        table.integer("body_of_work")
+            .references("id").inTable(bowTable).onDelete("cascade");
         table.integer("citation_num");
-
-        table.string("username")
+        table.integer("user")
             .notNullable()
-            .references("name").inTable(usersTable).onDelete("cascade");
+            .references("id").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
 
+    await createTableIfNotExists(locTable, (table) => {
+        table.increments();
+        table.integer("ref")
+            .references("id").inTable(refsTable).onDelete("cascade");
+        table.integer("section")
+            .references("id").inTable(sectionsTable).onDelete("cascade");
+        table.string("quote").notNullable();
+        table.integer("body_of_work")
+            .references("id").inTable(bowTable).onDelete("cascade");
+        table.integer("topic")
+            .references("id").inTable(topicsTable).onDelete("cascade");
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
         table.timestamps();
     });
 };
@@ -113,5 +155,7 @@ module.exports = {
     Reference: Reference,
     BodyOfWork: BodyOfWork,
     Topic: Topic,
+    Section: Section,
+    Location: Location,
     createTables: createTables
 };

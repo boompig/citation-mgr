@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Citation Manager &middot; Login</title>
+
+	<!-- bootstrap css v4 -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+	<div class="container login-container" id="login-app">
+		<ul class="nav nav-tabs">
+			<li role="presentation" class="nav-item">
+				<a class="nav-link active" href="#" v-on:click="setActiveForm('login')">Login</a>
+			</li>
+			<li role="presentation" class="nav-item">
+				<a class="nav-link" href="#" v-on:click="setActiveForm('register')">Register</a>
+			</li>
+		</ul>
+
+
+		<form role="form" class="login-form" id="login-form" v-on:submit.prevent="submitLogin"
+			v-show="isActiveForm('login')">
+			<h3 class="subpage-title">Login To Citation Manager</h3>
+
+			<div class="status-msg error" v-show="loginErrorMsg">{{ loginErrorMsg }}</div>
+
+			<label for="name">Email</label>
+			<input class="form-control" name="email" type="email"
+				placeholder="email"
+				v-model="loginData.email"
+				required="required" />
+
+			<label for="password">Password</label>
+			<input class="form-control" name="password" type="password"
+				placeholder="password"
+				v-model="loginData.password"
+				required="required" />
+
+			<button class="btn btn-primary form-control
+				submit-btn" type="submit">Login</button>
+		</form>
+
+		<form role="form" class="login-form" id="register-form"
+			v-on:submit.prevent="submitRegister"
+			v-show="isActiveForm('register')"
+			method="POST" action="/auth/register">
+			<h3 class="subpage-title">Register For Citation Manager</h3>
+
+			<div class="status-msg error" v-show="registerErrorMsg">{{ registerErrorMsg }}</div>
+
+			<label for="name">Email</label>
+			<input class="form-control" name="email" type="email"
+				placeholder="email"
+				v-model="registerData.email"
+				required="required" />
+
+			<label for="password">Password</label>
+			<input class="form-control" name="password" type="password"
+				placeholder="password"
+				v-model="registerData.password"
+				required="required" />
+
+			<label for="password">Name</label>
+			<input class="form-control" name="name" type="text" maxlength="255"
+				placeholder="your name"
+				v-model="registerData.name"
+				required="required" />
+
+			<button class="btn btn-primary form-control
+				submit-btn" type="submit">Register</button>
+		</form>
+
+	</div>
+
+	<!-- vue.js v2 -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,3 +1,6 @@
+/* global angular */
+/* node-env browser */
+
 angular.module("App", ["ui.bootstrap", "ngRoute", "ngCookies", "citationControllers"])
 .config(["$routeProvider", "$locationProvider", function($routeProvider, $locationProvider) {
     "use strict";
