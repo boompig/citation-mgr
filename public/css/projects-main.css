@@ -64,8 +64,18 @@ html, body {
 	font-size: 1.1rem;
 }
 
+.quote-container .quote .quote-text:hover {
+	color: #ea892e;
+}
+
 .quote-container .quote .quote-created-at-date {
 	font-size: .8rem;
 	color: #444;
 	text-align: right;
+}
+
+.quote-container .quote .quote-link {
+	font-size: .9rem;
+	text-align: right;
+	display: block;
 }

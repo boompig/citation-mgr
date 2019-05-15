@@ -25,6 +25,11 @@
 				<option v-for="project in projects" v-bind:value="project.id">{{ project.name }}</option>
 			</select>
 
+			<label for="link">Link</label>
+			<input type="text" name="link" class="form-control"
+				placeholder="link"
+				v-model="quote.link">
+
 			<button class="btn btn-primary form-control" type="submit">
 				{{ isNew ? "Create" : "Update" }}
 			</button>

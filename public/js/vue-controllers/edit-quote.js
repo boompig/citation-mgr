@@ -12,6 +12,7 @@ const app = new Vue({
         quote: {
             quote: "",
             project: -1,
+            link: ""
         },
         // set both page title and document title
         // dynamically read view URL

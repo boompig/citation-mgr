@@ -34,18 +34,20 @@
 				<h2 class="title">{{ activeProject.name }}</h2>
 				<div v-if="isQuotesLoaded">
 					<div v-if="quotes.hasOwnProperty(activeProject.id)">
-						<div class="quote" v-for="quote in quotes[activeProject.id]"
-							v-on:click="editQuote(quote)">
+						<div class="quote" v-for="quote in quotes[activeProject.id]">
 							<div class="quote-metadata">
 								<div class="quote-created-at-date">
 									Added on {{ new Date(quote.created_at).toDateString() }}
 								</div>
 							</div>
-							<div class="quote-text">&quot;{{ quote.quote }}&quot;</div>
+							<div class="quote-text" v-on:click="editQuote(quote)">&quot;{{ quote.quote }}&quot;</div>
 							<div v-if="quote.author">
 								<span>&nbsp;-&nbsp;</span>
 								<div class="quote-author">{{ quote.author }}</div>
 							</div>
+							<a class="quote-link" v-bind:href="quote.link" target="_blank">
+								{{ getQuoteText(quote) }}
+							</a>
 						</div>
 					</div>
 					<div v-if="!quotes.hasOwnProperty(activeProject.id)">
