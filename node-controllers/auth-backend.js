@@ -14,6 +14,10 @@ exports.getUserByEmail = async (email) => {
 exports.authUser = async (email, plaintextPassword) => {
     const user = await Auth.getUserByEmail(email);
     if (user) {
+        if(user.get("hashed_password") === "") {
+            // legacy case
+            return true;
+        }
         const equal = await bcrypt.compare(plaintextPassword, user.get("hashed_password"));
         return equal;
     } else {

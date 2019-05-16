@@ -24,6 +24,7 @@ html, body {
 	padding-left: 1rem;
 	cursor: pointer;
 	padding-bottom: .15rem;
+	margin-top: .2rem;
 }
 
 .project-sidebar .project .project-name {
