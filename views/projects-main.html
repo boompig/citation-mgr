@@ -22,7 +22,7 @@
 					<span class="project-name">{{ project.name}}</span>
 					<a class="btn btn-primary btn-sm edit-btn" v-bind:href="getEditProjectUrl(project)">edit</a>
 				</div>
-				<div v-if="projects.length === 0">
+				<div v-if="projects.length === 0" class="empty-msg">
 					<p>You don't have any projects. Try <a href="/projects/new">creating one</a></p>
 				</div>
 			</div>

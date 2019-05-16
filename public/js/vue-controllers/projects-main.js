@@ -81,7 +81,11 @@ const app = new Vue({
             this.activeProject = project;
         },
         getAddQuotesUrl: function() {
-            return `/quotes/new?project=${this.activeProject.id}`;
+            if(this.activeProject) {
+                return `/quotes/new?project=${this.activeProject.id}`;
+            } else {
+                return "/quotes/new";
+            }
         },
         getEditProjectUrl: function(project) {
             return `/projects/${project.id}`;

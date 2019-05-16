@@ -15,6 +15,10 @@ html, body {
 	padding-top: 2rem;
 }
 
+.project-sidebar .empty-msg {
+	padding-left: 1rem;
+}
+
 .project-sidebar .title, .quote-container .title {
 	font-weight: normal;
 	text-align: center;
