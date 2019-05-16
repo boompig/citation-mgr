@@ -46,15 +46,11 @@ const app = new Vue({
             }
         },
         createProject: async function() {
-            console.log("submitting new project:");
-            console.log(this.project);
             const res = await postJSON("/api/projects", this.project);
             if(res.ok) {
-                window.alert("project has been saved");
                 window.location.href = "/";
             } else {
                 if(res.status === 401) {
-                    window.alert("you have been logged out");
                     window.location.href = "/login";
                 } else {
                     console.error(res);
@@ -67,11 +63,8 @@ const app = new Vue({
             const res = await getJSON(`/api/projects/${this.projectID}`);
             if(res.ok) {
                 this.project = await res.json();
-                console.log("project:");
-                console.log(this.project);
             } else {
                 if(res.status === 401) {
-                    window.alert("you have been logged out");
                     window.location.href = "/login";
                 } else {
                     console.error(res);
@@ -83,9 +76,6 @@ const app = new Vue({
         editProject: async function() {
             const res = await postJSON(`/api/projects/${this.projectID}`, this.project);
             if(res.ok) {
-                // const response = await res.json();
-                // console.log(response);
-                // successfully updated
                 window.location.href = "/";
             } else {
                 if(res.status === 401) {
