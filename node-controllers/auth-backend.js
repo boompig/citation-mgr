@@ -60,6 +60,7 @@ exports.createUser = async (email, password, name) => {
         return user;
     } catch(e) {
         console.warn(`Failed to create a new user with email ${email} - user already exists`);
+        console.error(e);
         return null;
     }
 };
