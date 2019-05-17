@@ -25,6 +25,10 @@ describe("login", () => {
         await Auth.deleteUserByEmail(EMAIL);
     });
 
+    beforeEach(async() => {
+        await Auth.deleteUserByEmail(EMAIL);
+    });
+
     test("fail to login with bad credentials", async () => {
         // step 1 - delete the testing user (if present)
         // ignore return value

@@ -44,11 +44,9 @@ router.post("/", myPassport.authOrFail,
                 status: "success"
             });
         } else {
-            const errorMsg = "the password is incorrect";
-            console.warn(errorMsg);
             return res.status(401).json({
                 status: "error",
-                msg: errorMsg,
+                msg: "the password is incorrect",
             }).end();
         }
     }
