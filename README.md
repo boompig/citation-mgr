@@ -1,11 +1,11 @@
 Citation Manager
 ============
 
-Citation Manager written in Node.js
+Easily manage citations and quotes in research projects
 
 ## About
 
-This is a citation manager written in Node.js. It is the source code accompanying the live app at https://citation-mgr.herokuapp.com/.
+This is the source code accompanying the live app at https://citation-mgr.herokuapp.com/.
 Think of it as Evernote but for citations and quotes in research projects.
 
 ## Organization
