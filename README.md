@@ -1,4 +1,4 @@
-citation-mgr
+Citation Manager
 ============
 
 Citation Manager written in Node.js
