@@ -2,7 +2,7 @@ exports.authOrRedirect = (req, res, next) => {
     if(req.session.email && req.session.name) {
         next();
     } else {
-        res.redirect("/");
+        res.redirect("/login");
     }
 };
 

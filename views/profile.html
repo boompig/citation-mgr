@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Citation Manager &middot; Profile</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/edit-project.css">
+</head>
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Citation Manager</a>
+		<div class="text-right">
+			<button class="navbar-toggler" type="button"
+				data-toggle="collapse" data-target="main-navbar"
+				aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse flex-grow-1 text-right" id="main-navbar">
+			<ul class="navbar-nav ml-auto flex-nowrap">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Library</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/profile">Profile</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/auth/logout">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container" id="profile-app">
+		<h1 class="title">Profile</h1>
+		<p>You can change your name or email here</p>
+		<form role="form" v-on:submit.prevent="submitForm">
+			<div class="error-msg" v-show="errorMsg">{{ errorMsg }}</div>
+			<div class="success-msg" v-show="successMsg">{{ successMsg }}</div>
+
+			<label for="name">Name</label>
+			<input type="text" name="name" class="form-control"
+				placeholder="name"
+				required="required"
+				v-model="profile.name">
+
+			<label for="name">email</label>
+			<input type="email" name="email" class="form-control"
+				placeholder="email"
+				required="required"
+				v-model="profile.email">
+
+			<label for="name">password</label>
+			<input type="password" name="password" class="form-control"
+				placeholder="password"
+				required="required"
+				v-model="profile.password">
+
+			<button class="btn btn-primary form-control" type="submit">Save</button>
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+	<script src="/js/utils.js"></script>
+	<script src="/js/vue-components/profile.js"></script>
+</body>
+</html>

@@ -1,8 +1,7 @@
 /* env browser */
 /* global Vue, window */
-/* exported app */
 
-const app = new Vue({
+new Vue({
     el: "#login-app",
     data: {
         activeForm: "login",

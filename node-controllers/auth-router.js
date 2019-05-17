@@ -17,7 +17,7 @@ const router = Router();
  */
 router.post("/login",
     [
-        check("email").exists(),
+        check("email").exists().isEmail(),
         check("password").exists(),
     ],
     async (req, res) => {
@@ -74,7 +74,7 @@ router.post("/login",
  */
 router.post("/register",
     [
-        check("email").exists(),
+        check("email").exists().isEmail(),
         check("password").exists(),
         check("name").exists(),
     ],
