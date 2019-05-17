@@ -19,6 +19,8 @@ new Vue({
         isNew: true,
 
         projectID: null,
+
+        errorMsg: null,
     },
     mounted: function() {
         if(window.location.pathname === "/projects/new") {
@@ -62,14 +64,17 @@ new Vue({
             const res = await getJSON(`/api/projects/${this.projectID}`);
             if(res.ok) {
                 this.project = await res.json();
+            } else if(res.status === 401) {
+                window.location.href = "/login";
+            } else if(res.headers.get("content-type").toLowerCase().indexOf("application/json") >= 0) {
+                const j = await res.json();
+                console.error(j);
+                this.errorMsg = j.msg;
             } else {
-                if(res.status === 401) {
-                    window.location.href = "/login";
-                } else {
-                    console.error(res);
-                    const t = await res.text();
-                    console.error(t);
-                }
+                console.error(res);
+                const t = await res.text();
+                console.error(t);
+                this.errorMsg = t;
             }
         },
         editProject: async function() {

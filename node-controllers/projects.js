@@ -52,11 +52,19 @@ router.post("/", myPassport.authOrFail, async (req, res) => {
         name: req.body.name,
         user: user.get("id"),
     });
-    await project.save();
-    return res.json({
-        status: "success",
-        insert_id: project.get("id"),
-    });
+    try {
+        await project.save();
+        return res.json({
+            status: "success",
+            insert_id: project.get("id"),
+        });
+    } catch(e) {
+        console.error(e);
+        return res.status(500).json({
+            status: "error",
+            msg: e
+        });
+    }
 });
 
 router.post("/:id", myPassport.authOrFail, async (req, res) => {
@@ -78,10 +86,18 @@ router.post("/:id", myPassport.authOrFail, async (req, res) => {
             project.set({
                 name: req.body.name,
             });
-            await project.save();
-            return res.json({
-                status: "success",
-            });
+            try {
+                await project.save();
+                return res.json({
+                    status: "success",
+                });
+            } catch(e) {
+                console.error(e);
+                return res.status(500).json({
+                    status: "error",
+                    msg: e
+                });
+            }
         } else {
             return res.status(403).json({
                 status: "error",

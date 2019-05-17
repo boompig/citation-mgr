@@ -99,10 +99,18 @@ router.post("/:id", myPassport.authOrFail,
             user: user.get("id"),
             project: projectID,
         });
-        await quote.save();
-        return res.json({
-            status: "success",
-        });
+        try {
+            await quote.save();
+            return res.json({
+                status: "success",
+            });
+        } catch (e) {
+            console.error(e);
+            return res.status(500).json({
+                status: "error",
+                msg: e
+            });
+        }
     }
 );
 

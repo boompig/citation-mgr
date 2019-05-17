@@ -15,3 +15,8 @@ form button[type="submit"] {
 	text-align: center;
 	margin-top: .5rem;
 }
+
+.error-msg {
+	color: red;
+	text-align: center;
+}

@@ -13,6 +13,7 @@
 	<div class="container" id="edit-project-app">
 		<h1 class="title">{{ title }}</h1>
 		<form role="form" v-on:submit.prevent="submitProject">
+			<div class="error-msg" v-if="errorMsg">{{ errorMsg }}</div>
 			<label for="name">Project Name</label>
 			<input type="text" name="name" class="form-control"
 				placeholder="name"

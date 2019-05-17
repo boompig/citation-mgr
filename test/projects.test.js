@@ -32,6 +32,7 @@ describe("test project router", () => {
     let testSession = null;
 
     const cleanup = async() => {
+        // should also delete associated projects
         const user = await User.where({email: EMAIL}).fetch();
         if(user) {
             await user.destroy();

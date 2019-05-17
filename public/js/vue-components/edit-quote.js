@@ -23,7 +23,10 @@ new Vue({
         quoteID: null,
 
         projects: [],
+
         isProjectsLoaded: false,
+
+        errorMsg: null,
     },
     mounted: function() {
         if(window.location.pathname === "/quotes/new") {
@@ -115,15 +118,13 @@ new Vue({
                 // console.log(response);
                 // successfully updated
                 window.location.href = "/";
+            } else if(res.status === 401) {
+                window.location.href = "/login";
             } else {
-                if(res.status === 401) {
-                    // window.alert("you have been logged out");
-                    window.location.href = "/login";
-                } else {
-                    console.error(res);
-                    const t = await res.text();
-                    console.error(t);
-                }
+                console.error(res);
+                const t = await res.text();
+                console.error(t);
+                this.errorMsg = t;
             }
         },
     }
