@@ -2,6 +2,7 @@
 node_modules
 public/bower_components
 *.log
+coverage
 
 # editor
 *.sublime-*

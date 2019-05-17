@@ -1,11 +1,10 @@
 /* env browser */
 /* global Vue, window, document, getJSON, postJSON */
-/* exported app */
 
 /**
  * Support for both creating new and editing existing projects
  */
-const app = new Vue({
+new Vue({
     el: "#edit-project-app",
     data: {
         project: {

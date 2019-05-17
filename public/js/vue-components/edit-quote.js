@@ -1,12 +1,10 @@
-
 /* env browser */
 /* global Vue, window, document, getJSON, postJSON, parseSearchString */
-/* exported app */
 
 /**
  * Support for both creating new and editing existing projects
  */
-const app = new Vue({
+new Vue({
     el: "#edit-quote-app",
     data: {
         quote: {

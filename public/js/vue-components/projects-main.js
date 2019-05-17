@@ -1,8 +1,7 @@
 /* env browser */
-/* global Vue, window, getJSON, postJSON */
-/* exported app */
+/* global Vue, window, getJSON */
 
-const app = new Vue({
+new Vue({
     el: "#projects-main-app",
     data: {
         isQuotesLoaded: false,

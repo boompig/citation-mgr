@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/css/projects-main.css">
 </head>
 <body>
-	<div class="container" id="projects-main-app">
+	<div id="projects-main-app">
 		<div class="project-sidebar">
 			<h2 class="title">Projects
 				<a class="add-project-btn" href="/projects/new">&plus;</a>
@@ -31,55 +31,77 @@
 			</div>
 		</div>
 
-		<div class="logout-btn">
-			<a href="/auth/logout">Logout</a>
-		</div>
+		<main>
+			<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+				<a class="navbar-brand" href="#">Citation Manager</a>
+				<div class="text-right">
+					<button class="navbar-toggler" type="button"
+						data-toggle="collapse" data-target="main-navbar"
+						aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse flex-grow-1 text-right" id="main-navbar">
+					<ul class="navbar-nav ml-auto flex-nowrap">
+						<li class="nav-item active">
+							<a class="nav-link" href="/">Library</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/profile">Profile</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/auth/logout">Logout</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
 
-		<div class="quote-container">
-			<div v-if="activeProject">
-				<h2 class="title">{{ activeProject.name }}</h2>
-				<div v-if="isQuotesLoaded">
-					<div v-if="quotes.hasOwnProperty(activeProject.id)">
-						<div class="quote" v-for="quote in quotes[activeProject.id]">
-							<div class="quote-metadata">
-								<div class="quote-created-at-date">
-									Added on {{ new Date(quote.created_at).toDateString() }}
+			<div class="quote-container">
+				<div v-if="activeProject">
+					<h1 class="title">{{ activeProject.name }}</h1>
+					<div v-if="isQuotesLoaded">
+						<div v-if="quotes.hasOwnProperty(activeProject.id)">
+							<div class="quote" v-for="quote in quotes[activeProject.id]">
+								<div class="quote-metadata">
+									<div class="quote-created-at-date">
+										Added on {{ new Date(quote.created_at).toDateString() }}
+									</div>
 								</div>
+								<div class="quote-text" v-on:click="editQuote(quote)">&quot;{{ quote.quote }}&quot;</div>
+								<div v-if="quote.author">
+									<span>&nbsp;-&nbsp;</span>
+									<div class="quote-author">{{ quote.author }}</div>
+								</div>
+								<a class="quote-link" v-bind:href="quote.link" target="_blank">
+									{{ getQuoteText(quote) }}
+								</a>
 							</div>
-							<div class="quote-text" v-on:click="editQuote(quote)">&quot;{{ quote.quote }}&quot;</div>
-							<div v-if="quote.author">
-								<span>&nbsp;-&nbsp;</span>
-								<div class="quote-author">{{ quote.author }}</div>
-							</div>
-							<a class="quote-link" v-bind:href="quote.link" target="_blank">
-								{{ getQuoteText(quote) }}
-							</a>
+						</div>
+						<div v-if="!quotes.hasOwnProperty(activeProject.id)">
+							<p>
+								You don't have any quotes for this project.
+								Try <a v-bind:href="getAddQuotesUrl()">adding one</a>
+							</p>
 						</div>
 					</div>
-					<div v-if="!quotes.hasOwnProperty(activeProject.id)">
-						<p>
-							You don't have any quotes for this project.
-							Try <a v-bind:href="getAddQuotesUrl()">adding one</a>
-						</p>
+					<div v-if="!isQuotesLoaded">
+						Loading quotes for project {{ activeProject.name }}...
 					</div>
 				</div>
-				<div v-if="!isQuotesLoaded">
-					Loading quotes for project {{ activeProject.name }}...
+				<div v-if="!activeProject">
+					Select a project to load quotes
 				</div>
-			</div>
-			<div v-if="!activeProject">
-				Select a project to load quotes
-			</div>
 
-			<a class="add-quote-btn"
-				v-if="activeProject"
-				v-bind:href="getAddQuotesUrl()">&plus;</a>
+				<a class="add-quote-btn"
+					v-if="activeProject"
+					v-bind:href="getAddQuotesUrl()">&plus;</a>
+			</div>
 		</div>
-	</div>
+	</main>
 
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
 	<script src="/js/utils.js"></script>
-	<script src="/js/vue-controllers/projects-main.js"></script>
+	<script src="/js/vue-components/projects-main.js"></script>
 </body>
 </html>

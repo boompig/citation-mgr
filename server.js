@@ -32,26 +32,27 @@ app.use(expressSession({
 /**
  * One controller for each endpoint
  */
-const topicRouter = require("./node-controllers/topics");
-const refsRouter = require("./node-controllers/refs");
-const sectionRouter = require("./node-controllers/section-router");
+// const topicRouter = require("./node-controllers/topics");
+// const refsRouter = require("./node-controllers/refs");
+// const sectionRouter = require("./node-controllers/section-router");
 const authRouter = require("./node-controllers/auth-router");
-const sqlRouter = require("./node-controllers/sql-router");
-const bowRouter = require("./node-controllers/bow");
+// const sqlRouter = require("./node-controllers/sql-router");
+// const bowRouter = require("./node-controllers/bow");
 const profileRouter = require("./node-controllers/profile");
-const locationRouter = require("./node-controllers/location-router");
+// const locationRouter = require("./node-controllers/location-router");
 const projectRouter = require("./node-controllers/projects");
 const quoteRouter = require("./node-controllers/quotes");
+const myPassport = require("./node-controllers/my-passport");
 
 /****************** ROUTERS ************************************/
-app.use("/sql", sqlRouter);
+// app.use("/sql", sqlRouter);
 app.use("/auth", authRouter);
-app.use("/profile", profileRouter);
-app.use("/bow", bowRouter);
-app.use("/topics", topicRouter);
-app.use("/refs", refsRouter);
-app.use("/locations", locationRouter);
-app.use("/sections", sectionRouter);
+app.use("/api/profile", profileRouter);
+// app.use("/bow", bowRouter);
+// app.use("/topics", topicRouter);
+// app.use("/refs", refsRouter);
+// app.use("/locations", locationRouter);
+// app.use("/sections", sectionRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/quotes", quoteRouter);
 /****************** ROUTERS ******************************/
@@ -65,23 +66,27 @@ app.get("/login", (req, res) => {
     }
 });
 
-app.get("/projects/new", (req, res) => {
+app.get("/profile", myPassport.authOrRedirect, (req, res) => {
+    return res.sendFile(__dirname + "/views/profile.html");
+});
+
+app.get("/projects/new", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-project.html");
 });
 
-app.get("/projects/:id", (req, res) => {
+app.get("/projects/:id", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-project.html");
 });
 
-app.get("/quotes/new", (req, res) => {
+app.get("/quotes/new", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-quote.html");
 });
 
-app.get("/quotes/:id", (req, res) => {
+app.get("/quotes/:id", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-quote.html");
 });
 
-app.get("/", (req, res) => {
+app.get("/", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/projects-main.html");
 });
 /****************** VIEWS *********************************/

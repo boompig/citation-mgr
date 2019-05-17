@@ -8,6 +8,18 @@ form label {
 	font-weight: bold;
 }
 
-form button[type="submit"] {
-	margin-top: .9rem;
+form input[type="text"],
+form input[type="password"],
+form input[type="email"] {
+	margin-bottom: .8rem;
+}
+
+.error-msg {
+	color: red;
+	text-align: center;
+}
+
+.success-msg {
+	color: green;
+	text-align: center;
 }

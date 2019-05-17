@@ -22,9 +22,6 @@ router.get("/", myPassport.authOrFail, async (req, res) => {
 });
 
 router.get("/:id", myPassport.authOrFail, async (req, res) => {
-    if(!req.params.id) {
-        return sendError(res, 400, "id URL parameter is required");
-    }
     const user = await User.where({email: req.session.email}).fetch();
     const project = await Project.where({
         user: user.get("id"),
