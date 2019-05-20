@@ -199,5 +199,8 @@ module.exports = {
     Location: Location,
     Project: Project,
     Quote: Quote,
-    createTables: createTables
+    createTables: createTables,
+    tables: {
+        quotes: quotesTable
+    },
 };

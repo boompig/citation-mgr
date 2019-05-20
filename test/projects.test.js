@@ -74,7 +74,6 @@ describe("test project router", () => {
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(200);
-
     };
 
     const getProjects = async() => {
