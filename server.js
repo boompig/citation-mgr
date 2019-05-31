@@ -37,7 +37,7 @@ app.use(expressSession({
 // const sectionRouter = require("./node-controllers/section-router");
 const authRouter = require("./node-controllers/auth-router");
 // const sqlRouter = require("./node-controllers/sql-router");
-// const bowRouter = require("./node-controllers/bow");
+const pubRouter = require("./node-controllers/publications");
 const profileRouter = require("./node-controllers/profile");
 const articleRouter = require("./node-controllers/articles");
 // const locationRouter = require("./node-controllers/location-router");
@@ -52,6 +52,7 @@ app.use("/api/profile", profileRouter);
 app.use("/api/articles", articleRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/quotes", quoteRouter);
+app.use("/api/publications", pubRouter);
 /****************** ROUTERS ******************************/
 
 /****************** VIEWS *********************************/

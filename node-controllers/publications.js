@@ -1,34 +1,34 @@
 const { Router } = require("express");
-const { BodyOfWork, User } = require("./db-common");
+const { Publication, User } = require("./db-common");
 const myPassport = require("./my-passport");
 
 const router = new Router();
 
 router.get("/", myPassport.authOrFail, async (req, res) => {
     const user = await User.where({email: req.session.email}).fetch();
-    let works = await BodyOfWork.where({user: user.get("id")}).fetch();
-    if(!works) {
-        works = [];
+    let pubs = await Publication.where({user: user.get("id")}).fetchAll();
+    if(!pubs) {
+        pubs = [];
     }
-    return res.json(works);
+    return res.json(pubs);
 });
 
 router.delete("/:id", myPassport.authOrFail, async (req, res) => {
     if (!req.params.id) {
         return res.status(400).json({
-            status: "error", msg: "No BoW id provided"
+            status: "error", msg: "No publication id provided"
         });
     }
-    const bow = await BodyOfWork.where({id: req.params.id}).fetch();
-    if(bow) {
-        await bow.destroy();
+    const pub = await Publication.where({id: req.params.id}).fetch();
+    if(pub) {
+        await pub.destroy();
         return res.json({
             status: "success"
         });
     } else {
         return res.status(404).json({
             status: "error",
-            msg: `No BoW with ID ${req.params.id}`
+            msg: `No publication with ID ${req.params.id}`
         });
     }
 });
@@ -47,14 +47,14 @@ router.post("/", myPassport.authOrFail, async (req, res) => {
             status: "fucked"
         });
     }
-    const bow = new BodyOfWork({
+    const pub = new Publication({
         name: req.body.name,
         user: user.get("id"),
     });
-    await bow.save();
+    await pub.save();
     return res.json({
         status: "success",
-        insert_id: bow.get("id"),
+        insert_id: pub.get("id"),
     });
 });
 

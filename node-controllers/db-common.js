@@ -41,6 +41,8 @@ const User = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
+/* old */
+
 const bowTable = "bodies_of_work";
 const BodyOfWork = bookshelf.Model.extend({
     tableName: bowTable,
@@ -71,9 +73,19 @@ const Section = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
+/* end old */
+
+/* new */
+
 const projectsTable = "projects";
 const Project = bookshelf.Model.extend({
     tableName: projectsTable,
+    hasTimestamps: true,
+});
+
+const pubsTable = "publications";
+const Publication = bookshelf.Model.extend({
+    tableName: pubsTable,
     hasTimestamps: true,
 });
 
@@ -82,6 +94,8 @@ const Quote = bookshelf.Model.extend({
     tableName: quotesTable,
     hasTimestamps: true,
 });
+
+/* end new */
 
 const createTables = async () => {
     // create tables here
@@ -93,6 +107,8 @@ const createTables = async () => {
         table.boolean("is_admin").notNullable().defaultTo(false);
         table.timestamps();
     });
+
+    /* old */
 
     await createTableIfNotExists(topicsTable, (table) => {
         table.increments();
@@ -158,6 +174,10 @@ const createTables = async () => {
         table.timestamps();
     });
 
+    /* end old */
+
+    /* new */
+
     await createTableIfNotExists(projectsTable, (table) => {
         table.increments();
         table.string("name").notNullable();
@@ -169,20 +189,36 @@ const createTables = async () => {
         table.unique(["name", "user"]);
     });
 
-    await createTableIfNotExists(quotesTable, (table) => {
+    await createTableIfNotExists(pubsTable, (table) => {
         table.increments();
-        table.string("link");
-        table.string("authors");
-        table.date("source_pub_date");
-        table.string("publication_name");
-        table.string("source_title");
-        table.string("quote").notNullable();
+        table.string("name").notNullable();
         table.integer("user")
             .notNullable()
             .references("id").inTable(usersTable).onDelete("cascade");
+        table.timestamps();
+    });
+
+    await createTableIfNotExists(quotesTable, (table) => {
+        table.increments();
+
+        // table.string("link");
+        // table.string("authors");
+        // table.date("source_pub_date");
+        // table.string("publication_name");
+        // table.string("source_title");
+
+        // deliberately text instead of varchar
+        table.text("quote").notNullable();
+        table.integer("user")
+            .notNullable()
+            .references("id").inTable(usersTable).onDelete("cascade");
+        table.integer("publication")
+            .notNullable()
+            .references("id").inTable(pubsTable).onDelete("cascade");
         table.integer("project")
             .notNullable()
             .references("id").inTable(projectsTable).onDelete("cascade");
+
         table.timestamps();
     });
 };
@@ -199,8 +235,12 @@ module.exports = {
     Location: Location,
     Project: Project,
     Quote: Quote,
+    Publication: Publication,
     createTables: createTables,
     tables: {
-        quotes: quotesTable
+        users: usersTable,
+        projects: projectsTable,
+        publications: pubsTable,
+        quotes: quotesTable,
     },
 };

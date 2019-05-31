@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Quote, User, Project } = require("./db-common");
+const { Quote, User, Project, Publication } = require("./db-common");
 const myPassport = require("./my-passport");
 const { check, validationResult } = require("express-validator/check");
 
@@ -55,6 +55,7 @@ router.post("/:id", myPassport.authOrFail,
     [
         check("quote").exists(),
         check("project").exists().isInt(),
+        check("publication").exists().isInt(),
     ],
     async(req, res) => {
         const errors = validationResult(req);
@@ -119,6 +120,7 @@ router.post("/",
     [
         check("quote").exists(),
         check("project").exists().isInt(),
+        check("publication").exists().isInt(),
     ],
     async(req, res) => {
         const errors = validationResult(req);
@@ -139,17 +141,22 @@ router.post("/",
                 msg: `project with ID ${req.body.project} not found for this user`
             });
         }
+        const publication = await Publication.where({
+            user: user.get("id"),
+            id: req.body.publication,
+        }).fetch();
+        if(!publication) {
+            return res.status(400).json({
+                status: "error",
+                msg: `publication with ID ${req.body.publication} not found for this user`
+            });
+        }
 
-        // TODO should check whether source_pub_date is a valid date
         const quote = new Quote({
-            link: req.body.link,
-            authors: req.body.authors,
-            source_pub_date: req.body.source_pub_date,
-            publication_name: req.body.publication_name,
-            source_title: req.body.source_title,
             quote: req.body.quote,
             user: user.get("id"),
             project: project.get("id"),
+            publication: publication.get("id"),
         });
         await quote.save();
         return res.json({
