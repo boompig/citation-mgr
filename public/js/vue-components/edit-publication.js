@@ -84,7 +84,7 @@ new Vue({
         editPublication: async function() {
             const res = await postJSON(`/api/publications/${this.pubID}`, this.pub);
             if(res.ok) {
-                window.location.href = "/";
+                window.location.href = "/publications";
             } else {
                 if(res.status === 401) {
                     // window.alert("you have been logged out");

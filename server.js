@@ -84,6 +84,9 @@ app.get("/publications/new", myPassport.authOrRedirect, (req, res) => {
 app.get("/publications/:id", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-publication.html");
 });
+app.get("/publications", myPassport.authOrRedirect, (req, res) => {
+    res.sendFile(__dirname + "/views/publications.html");
+});
 /* publications */
 
 /* quotes */
