@@ -172,7 +172,7 @@ describe("test quotes router", () => {
 
         // quote a long quote
         const quote = {
-            quote: "he constraint that similar input patterns lead to similar outputs can lead to an inability ofthe system to learn certain mappings from input to output.",
+            quote: "The constraint that similar input patterns lead to similar outputs can lead to an inability ofthe system to learn certain mappings from input to output.",
             project: projectID,
             publication: pubId
         };
@@ -186,5 +186,7 @@ describe("test quotes router", () => {
         const quotesOut = quotesRes.body;
         expect(quotesOut.length).toBe(1);
         expect(quotesOut[0].quote).toBe(quote.quote);
+        // make sure related publication info also fetched
+        expect(quotesOut[0].publication.name).toBe(pub.name);
     });
 });

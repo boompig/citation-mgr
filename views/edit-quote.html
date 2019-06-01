@@ -10,6 +10,30 @@
 	<link rel="stylesheet" href="/css/edit-quote.css">
 </head>
 <body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Citation Manager</a>
+		<div class="text-right">
+			<button class="navbar-toggler" type="button"
+				data-toggle="collapse" data-target="main-navbar"
+				aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse flex-grow-1 text-right" id="main-navbar">
+			<ul class="navbar-nav ml-auto flex-nowrap">
+				<li class="nav-item">
+					<a class="nav-link" href="/">Library</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/profile">Profile</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/auth/logout">Logout</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
 	<div class="container" id="edit-quote-app">
 		<h1 class="title">{{ title }}</h1>
 		<form role="form" v-on:submit.prevent="submitForm" method="POST">
@@ -31,11 +55,13 @@
 				<label for="publication">Publication</label>
 				<select name="publication" class="form-control" required="required"
 					v-model="quote.publication">
+					<option value="-1" selected>Please choose a publication</option>
 					<option v-for="pub in publications" v-bind:value="pub.id">{{ pub.name }}</option>
 				</select>
+				<small><a href="/publications/new">Add new publications</a></small>
 			</div>
 			<div v-if="isPublicationsLoaded && publications.length === 0">
-				<p>You don't have any publications. Try creating some.</p>
+				<p>You don't have any publications. Try <a href="/publications/new">creating some.</a></p>
 			</div>
 			<div v-if="!isPublicationsLoaded">
 				Loading publications...

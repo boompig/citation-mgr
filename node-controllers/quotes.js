@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Quote, User, Project, Publication, tables } = require("./db-common");
+const { Quote, User, Project, Publication } = require("./db-common");
 const myPassport = require("./my-passport");
 const { check, validationResult } = require("express-validator/check");
 
@@ -38,7 +38,7 @@ router.get("/", myPassport.authOrFail, async (req, res) => {
                 user: user.get("id"),
                 project: project.get("id"),
             }).fetchAll({
-                withRelated: [tables.publications]
+                withRelated: ["publication"]
             });
         } else {
             return sendError(res, 404, `Project with ID ${req.query.project} either does not exist or does not belong to you`);
@@ -46,7 +46,7 @@ router.get("/", myPassport.authOrFail, async (req, res) => {
     } else {
         // fetch ALL quotes
         quotes = await Quote.where({user: user.get("id")}).fetchAll({
-            withRelated: [tables.publications]
+            withRelated: ["publication"]
         });
     }
     if(!quotes) {
