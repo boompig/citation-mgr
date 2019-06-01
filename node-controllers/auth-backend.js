@@ -27,7 +27,7 @@ exports.authUser = async (email, plaintextPassword) => {
 };
 
 /**
- * Delete teh user with the given email
+ * Delete the user with the given email
  */
 exports.deleteUserByEmail = async (email) => {
     const user = await Auth.getUserByEmail(email);
