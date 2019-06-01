@@ -40,7 +40,6 @@ describe("test publications router", () => {
     };
 
     beforeAll(async() => {
-        console.log("[beforeAll] running cleanup...");
         await cleanup();
     });
 
