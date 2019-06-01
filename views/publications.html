@@ -42,16 +42,20 @@
 
 		<small><a href="/publications/new">Add new publications</a></small>
 
-		<table class="table table-striped">
+		<table class="table table-striped" v-if="publications.length > 0">
 			<thead>
 				<tr>
 					<th>Publication Name</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="pub in publications">
 					<td>
 						<a v-bind:href="getEditUrl(pub)">{{ pub.name }}</a>
+					</td>
+					<td>
+						<button class="btn btn-danger" v-on:click="onDeleteClick(pub)">Delete</button>
 					</td>
 				</tr>
 			</tbody>

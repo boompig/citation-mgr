@@ -1,5 +1,5 @@
 /* env browser */
-/* global Vue, window, getJSON */
+/* global Vue, window, getJSON, deleteJSON */
 
 /**
  * Support for both creating new and editing existing publications
@@ -37,6 +37,20 @@ new Vue({
         },
         getEditUrl: function(pub) {
             return `/publications/${pub.id}`;
-        }
+        },
+        onDeleteClick: function(pub) {
+            if(window.confirm(`Delete publication with name ${pub.name}?`)) {
+                this.deletePublication(pub);
+            }
+        },
+        deletePublication: async function(pub) {
+            const res = await deleteJSON(`/api/publications/${pub.id}`);
+            if(res.ok) {
+                window.location.reload();
+                // this.publications.remove(pub);
+            } else {
+                console.error(res);
+            }
+        },
     }
 });
