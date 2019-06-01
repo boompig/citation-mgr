@@ -52,8 +52,7 @@ describe("test project router", () => {
     });
 
     const createTestAccount = async() => {
-        return testSession
-            .post("/auth/register")
+        return testSession.post("/auth/register")
             .send({
                 email: EMAIL,
                 password: PASSWORD,
@@ -65,8 +64,7 @@ describe("test project router", () => {
     };
 
     const loginTestAccount = async() => {
-        return testSession
-            .post("/auth/login")
+        return testSession.post("/auth/login")
             .send({
                 email: EMAIL,
                 password: PASSWORD,
@@ -74,20 +72,17 @@ describe("test project router", () => {
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(200);
-
     };
 
     const getProjects = async() => {
-        return testSession
-            .get("/api/projects")
+        return testSession.get("/api/projects")
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
             .expect(200);
     };
 
     const createProject = async(project) => {
-        return testSession
-            .post("/api/projects")
+        return testSession.post("/api/projects")
             .send(project)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)
@@ -95,8 +90,7 @@ describe("test project router", () => {
     };
 
     const editProject = async(projectID, newProject) => {
-        return testSession
-            .post(`/api/projects/${projectID}`)
+        return testSession.post(`/api/projects/${projectID}`)
             .send(newProject)
             .set("Accept", "application/json")
             .expect("Content-Type", /json/)

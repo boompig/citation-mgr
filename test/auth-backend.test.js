@@ -54,10 +54,10 @@ describe("login", () => {
         // if the user already exists, that's fine just fetch it
         if(!user) {
             user = await Auth.getUserByEmail(EMAIL);
-            console.log("User already exists, fetched user from database");
+            // console.log("User already exists, fetched user from database");
             // console.log(user);
         } else {
-            console.log("Successfully created new user");
+            // console.log("Successfully created new user");
             // console.log(user);
         }
         expect(user).not.toBeNull();

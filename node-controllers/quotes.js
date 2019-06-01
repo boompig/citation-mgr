@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Quote, User, Project } = require("./db-common");
+const { Quote, User, Project, Publication } = require("./db-common");
 const myPassport = require("./my-passport");
 const { check, validationResult } = require("express-validator/check");
 
@@ -31,19 +31,23 @@ router.get("/", myPassport.authOrFail, async (req, res) => {
     if(req.query.project) {
         const project = await Project.where({
             user: user.get("id"),
-            name: req.query.project,
+            id: req.query.project,
         }).fetch();
         if(project) {
             quotes = await Quote.where({
                 user: user.get("id"),
                 project: project.get("id"),
-            }).fetch();
+            }).fetchAll({
+                withRelated: ["publication"]
+            });
         } else {
-            return sendError(404, `Project with name ${req.query.project} either does not exist or does not belong to you`);
+            return sendError(res, 404, `Project with ID ${req.query.project} either does not exist or does not belong to you`);
         }
     } else {
         // fetch ALL quotes
-        quotes = await Quote.where({user: user.get("id")}).fetchAll();
+        quotes = await Quote.where({user: user.get("id")}).fetchAll({
+            withRelated: ["publication"]
+        });
     }
     if(!quotes) {
         quotes = [];
@@ -55,6 +59,7 @@ router.post("/:id", myPassport.authOrFail,
     [
         check("quote").exists(),
         check("project").exists().isInt(),
+        check("publication").exists().isInt(),
     ],
     async(req, res) => {
         const errors = validationResult(req);
@@ -88,16 +93,25 @@ router.post("/:id", myPassport.authOrFail,
             }
         }
 
-        // TODO should check whether source_pub_date is a valid date
+        const pubID = req.body.publication;
+        if(pubID !== quote.get("publication")) {
+            const pub = await Publication.where({
+                user: user.get("id"),
+                id: pubID,
+            }).fetch();
+            if(!pub) {
+                return res.status(404).json({
+                    status: "error",
+                    msg: `publication with ID ${pubID} not found for this user`
+                });
+            }
+        }
+
         quote.set({
-            link: req.body.link,
-            authors: req.body.authors,
-            source_pub_date: req.body.source_pub_date,
-            publication_name: req.body.publication_name,
-            source_title: req.body.source_title,
             quote: req.body.quote,
             user: user.get("id"),
             project: projectID,
+            publication: pubID,
         });
         try {
             await quote.save();
@@ -119,6 +133,7 @@ router.post("/",
     [
         check("quote").exists(),
         check("project").exists().isInt(),
+        check("publication").exists().isInt(),
     ],
     async(req, res) => {
         const errors = validationResult(req);
@@ -139,17 +154,22 @@ router.post("/",
                 msg: `project with ID ${req.body.project} not found for this user`
             });
         }
+        const publication = await Publication.where({
+            user: user.get("id"),
+            id: req.body.publication,
+        }).fetch();
+        if(!publication) {
+            return res.status(400).json({
+                status: "error",
+                msg: `publication with ID ${req.body.publication} not found for this user`
+            });
+        }
 
-        // TODO should check whether source_pub_date is a valid date
         const quote = new Quote({
-            link: req.body.link,
-            authors: req.body.authors,
-            source_pub_date: req.body.source_pub_date,
-            publication_name: req.body.publication_name,
-            source_title: req.body.source_title,
             quote: req.body.quote,
             user: user.get("id"),
             project: project.get("id"),
+            publication: publication.get("id"),
         });
         await quote.save();
         return res.json({
