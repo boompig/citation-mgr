@@ -92,7 +92,7 @@ describe("test publications router", () => {
     test("get publications after authenticating", async () => {
         await login();
         const res = await getPublications();
-        console.log(res.text);
+        // console.log(res.text);
         // array
         expect(res.body).toStrictEqual([]);
     });
@@ -103,12 +103,12 @@ describe("test publications router", () => {
         };
         await login();
         const createRes = await createPublication(pub.name);
-        console.log(createRes.text);
+        // console.log(createRes.text);
         // array
         expect(typeof createRes.body.insert_id).toStrictEqual("number");
 
         const pubRes = await getPublications();
-        console.log(pubRes.text);
+        // console.log(pubRes.text);
         const resultPubs = pubRes.body;
         expect(resultPubs.length).toBe(1);
         expect(resultPubs[0].name).toStrictEqual(pub.name);

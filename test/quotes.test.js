@@ -115,7 +115,7 @@ describe("test quotes router", () => {
     test("get quotes with authentication", async () => {
         await login();
         const res = await getQuotes();
-        console.log(res.text);
+        // console.log(res.text);
         // array
         expect(res.body).toStrictEqual([]);
     });
@@ -147,7 +147,7 @@ describe("test quotes router", () => {
         };
 
         const res = await createQuote(quote);
-        console.log(res.text);
+        // console.log(res.text);
         expect(typeof res.body.insert_id).toStrictEqual("number");
     });
 
@@ -178,11 +178,11 @@ describe("test quotes router", () => {
         };
 
         const res = await createQuote(quote);
-        console.log(res.text);
+        // console.log(res.text);
         expect(typeof res.body.insert_id).toStrictEqual("number");
 
         const quotesRes = await getQuotes(projectID);
-        console.log(quotesRes.text);
+        // console.log(quotesRes.text);
         const quotesOut = quotesRes.body;
         expect(quotesOut.length).toBe(1);
         expect(quotesOut[0].quote).toBe(quote.quote);
