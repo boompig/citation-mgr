@@ -93,6 +93,10 @@ const quotesTable = "quotes";
 const Quote = bookshelf.Model.extend({
     tableName: quotesTable,
     hasTimestamps: true,
+
+    publications: function() {
+        return this.belongsTo(Publication);
+    }
 });
 
 /* end new */

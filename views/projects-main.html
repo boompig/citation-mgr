@@ -68,13 +68,13 @@
 									</div>
 								</div>
 								<div class="quote-text" v-on:click="editQuote(quote)">&quot;{{ quote.quote }}&quot;</div>
-								<div v-if="quote.author">
+								<!-- <div v-if="quote.author">
 									<span>&nbsp;-&nbsp;</span>
 									<div class="quote-author">{{ quote.author }}</div>
-								</div>
-								<a class="quote-link" v-bind:href="quote.link" target="_blank">
+								</div> -->
+								<!-- <a class="quote-link" v-bind:href="quote.link" target="_blank">
 									{{ getQuoteText(quote) }}
-								</a>
+								</a> -->
 							</div>
 						</div>
 						<div v-if="!quotes.hasOwnProperty(activeProject.id)">

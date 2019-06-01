@@ -68,21 +68,32 @@ app.get("/profile", myPassport.authOrRedirect, (req, res) => {
     return res.sendFile(__dirname + "/views/profile.html");
 });
 
+/* projects */
 app.get("/projects/new", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-project.html");
 });
-
 app.get("/projects/:id", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-project.html");
 });
+/* projects */
 
+/* publications */
+app.get("/publications/new", myPassport.authOrRedirect, (req, res) => {
+    res.sendFile(__dirname + "/views/edit-publication.html");
+});
+app.get("/publications/:id", myPassport.authOrRedirect, (req, res) => {
+    res.sendFile(__dirname + "/views/edit-publication.html");
+});
+/* publications */
+
+/* quotes */
 app.get("/quotes/new", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-quote.html");
 });
-
 app.get("/quotes/:id", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/edit-quote.html");
 });
+/* quotes */
 
 app.get("/", myPassport.authOrRedirect, (req, res) => {
     res.sendFile(__dirname + "/views/projects-main.html");

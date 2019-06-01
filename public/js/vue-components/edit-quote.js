@@ -10,7 +10,7 @@ new Vue({
         quote: {
             quote: "",
             project: -1,
-            link: ""
+            publication: -1,
         },
         // set both page title and document title
         // dynamically read view URL
@@ -25,6 +25,10 @@ new Vue({
         projects: [],
 
         isProjectsLoaded: false,
+
+        publications: [],
+
+        isPublicationsLoaded: false,
 
         errorMsg: null,
     },
@@ -47,6 +51,13 @@ new Vue({
                 this.quote.project = Number.parseInt(params.project);
             }
         });
+
+        this.getAllPublications().then(() => {
+            const params = parseSearchString();
+            if(params.hasOwnProperty("publication")) {
+                this.quote.publication = Number(parseInt(params.publication));
+            }
+        });
     },
     methods: {
         readQuoteIdFromUrl: function() {
@@ -64,8 +75,22 @@ new Vue({
             const res = await getJSON("/api/projects");
             if(res.ok) {
                 this.projects = await res.json();
-                console.log("projects:");
-                console.log(this.projects);
+                this.isProjectsLoaded = true;
+            } else {
+                if(res.status === 401) {
+                    window.location.href = "/login";
+                } else {
+                    console.error(res);
+                    const t = await res.text();
+                    console.error(t);
+                }
+            }
+        },
+        getAllPublications: async function() {
+            const res = await getJSON("/api/publications");
+            if(res.ok) {
+                this.publications = await res.json();
+                this.isPublicationsLoaded = true;
             } else {
                 if(res.status === 401) {
                     window.location.href = "/login";
