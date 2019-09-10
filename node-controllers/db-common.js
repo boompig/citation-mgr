@@ -102,6 +102,18 @@ const Quote = bookshelf.Model.extend({
 /* end new */
 
 const createTables = async () => {
+
+    // test the connection
+    try {
+        await knex.raw("select 1+1 as result");
+    } catch (e) {
+        console.error("Fatal error: failed to connect to Postgres database");
+        console.error(e);
+        process.exit(1);
+    }
+    console.log("successfully connected to Postgres database");
+    console.log("creating tables...");
+
     // create tables here
     await createTableIfNotExists(usersTable, (table) => {
         table.increments();
@@ -225,6 +237,8 @@ const createTables = async () => {
 
         table.timestamps();
     });
+
+    console.log("database setup complete");
 };
 
 // exports

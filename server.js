@@ -103,11 +103,8 @@ app.get("/", myPassport.authOrRedirect, (req, res) => {
 });
 /****************** VIEWS *********************************/
 
-console.log("Running database setup...");
-dbCommon.createTables().then(() => {
-    console.log("Database setup complete");
-});
-app.listen(port, () => {
+app.listen(port, async () => {
+    await dbCommon.createTables();
     console.log(`running on http://localhost:${port}`);
 });
 

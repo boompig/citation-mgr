@@ -31,7 +31,7 @@ The rest of the frontend code can be found in `public/js/vue-components`
 ### Get web server locally
 
 * git clone this repo
-* cd into the directory where you cloned the repo and run `yarn install`
+* `cd` into the directory where you cloned the repo and run `yarn install`
 * from the same directory, run `yarn start`
 * leave this terminal window running, server is running on port 8080
   * you can set the port using the PORT environment variable
@@ -42,6 +42,10 @@ The rest of the frontend code can be found in `public/js/vue-components`
 
 ### Testing
 
-1. Set up the postgres database locally (unfortunately not mocked out)
+1. Set up the Postgres database locally (unfortunately not mocked out)
 2. `yarn lint`
 3. `yarn test`
+
+#### Database Setup
+
+See file `node-controllers/db-common.js`
