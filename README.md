@@ -1,7 +1,7 @@
+**NOTE: This repository is deprecated. It was a small side project I worked on in grad school and no longer maintained**
+
 Citation Manager
 ============
-
-**NOTE: This repository is deprecated. It was a small side project I worked on in grad school and no longer maintained**
 
 Easily manage citations and quotes in research projects
 
